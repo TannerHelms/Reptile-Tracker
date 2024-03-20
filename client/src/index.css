@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.w-600 {
+  max-width: 600px;
+  width: 90%;
+}
