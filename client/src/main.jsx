@@ -6,7 +6,7 @@ import "@mantine/core/styles.css";
 import { Provider } from "react-redux";
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { MantineProvider, createTheme, rem } from "@mantine/core";
-import Home from "./pages/dashboard.jsx";
+import Dashboard from "./pages/dashboard.jsx";
 import Login from "./pages/login.jsx";
 import SignUp from "./pages/sign_up.jsx";
 import { ApiContext } from "./utils/api.js";
@@ -23,7 +23,7 @@ const router = createHashRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: <Dashboard />,
       },
       {
         path: "/login",
