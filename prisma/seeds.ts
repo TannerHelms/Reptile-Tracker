@@ -27,6 +27,24 @@ async function main() {
     }
   })
   // TODO: put default data in the database
+  // Seed reptile data
+  await prisma.reptile.createMany({
+    data: [
+      {
+        userId: 1, // Assuming the admin user has userId 1
+        species: "ball_python",
+        name: "Peter",
+        sex: "m"
+      },
+      {
+        userId: 1,
+        species: "corn_snake",
+        name: "Cornelia",
+        sex: "f"
+      },
+      // Add more reptile data as needed
+    ],
+  });
   console.log(process.env);
 }
 

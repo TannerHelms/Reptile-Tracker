@@ -14,6 +14,9 @@ datasource db {
 // createdAt DateTime @default(now())
 // updatedAt DateTime @updatedAt
 
+// A User has many Reptiles and Schedules.
+// A Reptile has many Feedings, HusbandryRecords, and Schedules 
+
 model User {
   id            Int      @id @default(autoincrement())
   firstName     String
@@ -33,4 +36,50 @@ model Profile {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   user            User?
+}
+
+model Reptile {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  species   String    // one of "ball_python", "king_snake", "corn_snake", "redtail_boa"
+  name      String
+  sex       String    // either "m" or "f"
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Feeding {
+  id        Int       @id @default(autoincrement())
+  reptileID Int
+  foodItem  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model HusbandryRecord {
+  id          Int       @id @default(autoincrement())
+  reptileID   Int
+  length      Float
+  weight      Float
+  temperature Float
+  humidity    Float
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Schedule {
+  id          Int       @id @default(autoincrement())
+  reptileId   Int
+  userId      Int 
+  type        String    // one of "feed", "record", "clean"
+  description String
+  monday      Boolean   @default(false)
+  tuesday     Boolean   @default(false)
+  wednesday   Boolean   @default(false)
+  thursday    Boolean   @default(false)
+  friday      Boolean   @default(false)
+  saturday    Boolean   @default(false)
+  sunday      Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
