@@ -11,6 +11,7 @@ import classes from "../css/navbar.module.css";
 import useAuth from "../hooks/use_auth";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/auth_slice";
+import useInit from "../hooks/use_init";
 
 const data = [
   { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
@@ -23,9 +24,7 @@ function Navbar({ close }) {
     location.pathname.substring(1).charAt(0).toUpperCase() +
       location.pathname.slice(2).replace("_", " ")
   );
-  const navigate = useNavigate();
-  const { user } = useAuth();
-  const dispatch = useDispatch();
+  const { navigate, dispatch } = useInit();
 
   const handleSignOut = () => {
     close();
