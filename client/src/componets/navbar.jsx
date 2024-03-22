@@ -1,36 +1,32 @@
-import { useState } from "react";
-import { Group, Code } from "@mantine/core";
 import {
-  IconBellRinging,
-  IconFingerprint,
-  IconKey,
-  IconSettings,
-  Icon2fa,
-  IconDatabaseImport,
-  IconReceipt2,
-  IconSwitchHorizontal,
-  IconLogout,
   IconDashboard,
+  IconLayoutDashboard,
+  IconLogout,
   IconPaperclip,
+  IconSpider,
 } from "@tabler/icons-react";
-import classes from "../css/navbar.module.css";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useCurrentUser from "../hooks/use_User";
+import classes from "../css/navbar.module.css";
+import useAuth from "../hooks/use_auth";
+import { useDispatch } from "react-redux";
+import { logout } from "../store/auth_slice";
 
 const data = [
-  { link: "/", label: "Dashboard", icon: IconDashboard },
-  { link: "/reptile", label: "Reptile", icon: IconPaperclip },
+  { link: "/", label: "Dashboard", icon: IconLayoutDashboard },
+  { link: "/reptile", label: "Reptile", icon: IconSpider },
 ];
 
 function Navbar({ setPage, close }) {
   const [active, setActive] = useState("Dashboard");
   const navigate = useNavigate();
-  const user = useCurrentUser();
+  const { user } = useAuth();
+  const dispatch = useDispatch();
 
   const handleSignOut = () => {
     close();
     window.localStorage.removeItem("jwt");
-    user.updateUser(null);
+    dispatch(logout());
     navigate("/login");
   };
 
@@ -58,13 +54,9 @@ function Navbar({ setPage, close }) {
       <div className={classes.navbarMain}>{links}</div>
 
       <div className={classes.footer}>
-        <a
-          href="#"
-          className={classes.link}
-          onClick={(event) => event.preventDefault()}
-        >
+        <a href="#" className={classes.link} onClick={handleSignOut}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span onClick={handleSignOut}>Logout</span>
+          <span>Logout</span>
         </a>
       </div>
     </nav>

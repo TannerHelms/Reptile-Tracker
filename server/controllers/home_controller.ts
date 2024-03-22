@@ -1,7 +1,4 @@
-import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import { DEBUG, MANIFEST } from "../../index";
 // /users/...
 export const buildHomeController = () => {

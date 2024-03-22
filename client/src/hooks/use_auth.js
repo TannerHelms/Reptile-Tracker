@@ -1,28 +1,21 @@
-import { useEffect, useState } from "react";
-import useApi from "./use_api";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useCurrentUser from "./use_User";
+import { Auth } from "../store/auth_slice";
+import { useEffect } from "react";
 
-const useAuth = () => {
-    const [user, setUser] = useState("");
+// return {user, token}
+const useAuth = (requireAuth = true) => {
+    const auth = useSelector(Auth);
     const navigate = useNavigate();
-    const userContext = useCurrentUser();
-
-    const api = useApi();
 
     useEffect(() => {
-        const get = async () => {
-            const resp = await api.get("/users/me");
-            if (resp.user) {
-                setUser(resp.user);
-                userContext.updateUser(resp.user);
-            } else {
-                navigate("/login")
-            }
+        if (requireAuth && !auth?.user) {
+            navigate("/login");
         }
-        get();
-    }, []);
-    return user;
+    }, [])
+
+    return auth;
+
 }
 
 export default useAuth;

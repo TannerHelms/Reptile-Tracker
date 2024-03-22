@@ -18,7 +18,7 @@ export const buildSessionsController = (db: PrismaClient) => {
       const token = jwt.sign({
         userId: user.id,
       }, process.env.ENCRYPTION_KEY as string);
-      res.json({ token });
+      res.json({ user, token });
     } else {
       res.status(404).json({ error: "Invalid email or password" })
     }
