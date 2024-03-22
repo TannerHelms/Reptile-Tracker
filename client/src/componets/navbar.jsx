@@ -1,4 +1,10 @@
-import { IconDashboard, IconLogout, IconPaperclip } from "@tabler/icons-react";
+import {
+  IconDashboard,
+  IconLayoutDashboard,
+  IconLogout,
+  IconPaperclip,
+  IconSpider,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "../css/navbar.module.css";
@@ -7,8 +13,8 @@ import { useDispatch } from "react-redux";
 import { logout } from "../store/auth_slice";
 
 const data = [
-  { link: "/", label: "Dashboard", icon: IconDashboard },
-  { link: "/reptile", label: "Reptile", icon: IconPaperclip },
+  { link: "/", label: "Dashboard", icon: IconLayoutDashboard },
+  { link: "/reptile", label: "Reptile", icon: IconSpider },
 ];
 
 function Navbar({ setPage, close }) {
@@ -48,13 +54,9 @@ function Navbar({ setPage, close }) {
       <div className={classes.navbarMain}>{links}</div>
 
       <div className={classes.footer}>
-        <a
-          href="#"
-          className={classes.link}
-          onClick={(event) => event.preventDefault()}
-        >
+        <a href="#" className={classes.link} onClick={handleSignOut}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span onClick={handleSignOut}>Logout</span>
+          <span>Logout</span>
         </a>
       </div>
     </nav>

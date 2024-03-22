@@ -50,7 +50,7 @@ const Login = () => {
   }
 
   return (
-    <Center className="w-screen h-screen">
+    <Center className="w-screen h-screen background-gradient">
       <form
         onSubmit={form.onSubmit((values) => handleLogin(values))}
         className="w-600"

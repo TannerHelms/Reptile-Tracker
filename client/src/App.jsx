@@ -7,7 +7,6 @@ import useAuth from "./hooks/use_auth";
 
 const App = () => {
   const { user } = useAuth(false);
-  console.log(user);
   const [page, setPage] = useState("Dashboard");
   const [opened, { toggle }] = useDisclosure();
 

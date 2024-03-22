@@ -14,7 +14,8 @@ import { Api } from "./utils/api.js";
 import { UserProvider } from "./utils/user.jsx";
 import appTheme from "./theme.js";
 import Reptile from "./pages/reptile.jsx";
-import { store } from "./store/store.js";
+import { persistor, store } from "./store/store.js";
+import { PersistGate } from "redux-persist/integration/react";
 const router = createHashRouter([
   {
     path: "",
@@ -42,14 +43,14 @@ const router = createHashRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    {/* <PersistGate loading={null} persistor={persistor}> */}
-    <MantineProvider theme={appTheme}>
-      <ApiContext.Provider value={new Api()}>
-        <UserProvider>
-          <RouterProvider router={router} />
-        </UserProvider>
-      </ApiContext.Provider>
-    </MantineProvider>
-    {/* </PersistGate> */}
+    <PersistGate loading={null} persistor={persistor}>
+      <MantineProvider theme={appTheme}>
+        <ApiContext.Provider value={new Api()}>
+          <UserProvider>
+            <RouterProvider router={router} />
+          </UserProvider>
+        </ApiContext.Provider>
+      </MantineProvider>
+    </PersistGate>
   </Provider>
 );
