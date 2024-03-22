@@ -1,15 +1,14 @@
 import { AppShell, Burger, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./componets/navbar";
 import useAuth from "./hooks/use_auth";
+import { useState } from "react";
 
 const App = () => {
   const { user } = useAuth(false);
-  const [page, setPage] = useState("Dashboard");
   const [opened, { toggle }] = useDisclosure();
-
+  const page = useLocation().pathname.substring(1);
   if (!user) {
     return <Outlet />;
   }
@@ -31,12 +30,12 @@ const App = () => {
         </div>
         <div className="fixed inset-x-0 -z-10">
           <Title order={1} ta="center">
-            {page}
+            {page.charAt(0).toUpperCase() + page.slice(1)}
           </Title>
         </div>
       </AppShell.Header>
       <AppShell.Navbar>
-        <Navbar setPage={(link) => setPage(link)} close={toggle} />
+        <Navbar close={toggle} />
       </AppShell.Navbar>
       <AppShell.Main>
         <Outlet />

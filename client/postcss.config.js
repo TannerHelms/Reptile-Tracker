@@ -1,7 +1,8 @@
 export default {
     plugins: {
-        tailwindcss: {},
-        autoprefixer: {},
+        'postcss-import': {},
+        'tailwindcss/nesting': 'postcss-nesting',
+
         'postcss-preset-mantine': {},
         'postcss-simple-vars': {
             variables: {
@@ -12,5 +13,7 @@ export default {
                 'mantine-breakpoint-xl': '88em',
             },
         },
+        tailwindcss: {},
+        autoprefixer: {},
     },
 }

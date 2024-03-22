@@ -4,10 +4,9 @@ import App from "./App.jsx";
 import "./index.css";
 import "@mantine/core/styles.css";
 import { Provider } from "react-redux";
-import { RouterProvider, createHashRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createHashRouter } from "react-router-dom";
 import { MantineProvider, createTheme, rem } from "@mantine/core";
 import Dashboard from "./pages/dashboard.jsx";
-import Login from "./pages/login.jsx";
 import SignUp from "./pages/sign_up.jsx";
 import { ApiContext } from "./utils/api.js";
 import { Api } from "./utils/api.js";
@@ -16,6 +15,7 @@ import appTheme from "./theme.js";
 import Reptile from "./pages/reptile.jsx";
 import { persistor, store } from "./store/store.js";
 import { PersistGate } from "redux-persist/integration/react";
+import Login from "./pages/login.jsx";
 const router = createHashRouter([
   {
     path: "",
@@ -23,6 +23,10 @@ const router = createHashRouter([
     children: [
       {
         path: "",
+        element: <Navigate to="/dashboard" />,
+      },
+      {
+        path: "/dashboard",
         element: <Dashboard />,
       },
       {
