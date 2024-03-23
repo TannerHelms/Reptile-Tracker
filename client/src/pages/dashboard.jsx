@@ -1,5 +1,14 @@
-import { Button, List, Modal, Table, ThemeIcon, rem, TextInput, Select } from "@mantine/core";
-import { IconCircleCheck } from "@tabler/icons-react";
+import {
+  Button,
+  List,
+  Modal,
+  Table,
+  ThemeIcon,
+  rem,
+  TextInput,
+  Select,
+} from "@mantine/core";
+import { IconCheck, IconCircleCheck } from "@tabler/icons-react";
 import { useState } from "react";
 import ReptileTile from "../componets/reptile_tile";
 import TaskTile from "../componets/task_tile";
@@ -9,12 +18,14 @@ import useSetQuery from "../hooks/use_set_query";
 import Schedule from "../mock/schedule";
 import { useDisclosure } from "@mantine/hooks";
 import HeaderTabs from "../componets/header_tabs";
+import { notifications } from "@mantine/notifications";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const [reptileFocus, setReptileFocus] = useState(null);
   const [tab, setTab] = useState("Details");
+  const [updating, setUpdating] = useState(false);
   const { getReptiles } = useReptile();
   const [tasks, setTasks] = useState(Schedule);
   const { data: reptiles } = useSetQuery({
@@ -25,6 +36,14 @@ const Dashboard = () => {
 
   const completeTask = (id) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
+  };
+
+  const handleUpdateReptile = () => {
+    setUpdating(true);
+
+    setTimeout(() => {
+      setUpdating(false);
+    }, 2000);
   };
 
   if (!user) {
@@ -40,7 +59,12 @@ const Dashboard = () => {
         padding={0}
         withCloseButton={false}
       >
-        <HeaderTabs state={setTab} reptile={reptileFocus} close={close} tab={tab}/>
+        <HeaderTabs
+          state={setTab}
+          reptile={reptileFocus}
+          close={close}
+          tab={tab}
+        />
         <div className="p-4">
           {tab === "Details" && (
             <div className="flex flex-col gap-5">
@@ -63,25 +87,34 @@ const Dashboard = () => {
             </div>
           )}
           {tab === "Edit" && (
-           <form className="flex flex-col gap-5">
-            <TextInput
-              placeholder="Name"
-              defaultValue={reptileFocus?.name}
-              required
-              size="md"
-            />
-            <Select
-            data={["corn snake", "ball python", "king snake"]}
-            defaultValue={reptileFocus?.species.slice(0).replace("_", " ")}
-            size="md"
-            />
-            <Select
-            data={["M", "F"]}
-            defaultValue={reptileFocus.sex.toLocaleUpperCase()}
-            size="md"
-            />
-            <Button fullWidth>Update</Button>
-           </form>
+            <form className="flex flex-col gap-5">
+              <TextInput
+                placeholder="Name"
+                defaultValue={reptileFocus?.name}
+                required
+                size="md"
+              />
+              <Select
+                data={["corn snake", "ball python", "king snake"]}
+                defaultValue={reptileFocus?.species.slice(0).replace("_", " ")}
+                size="md"
+              />
+              <Select
+                data={["M", "F"]}
+                defaultValue={reptileFocus.sex.toLocaleUpperCase()}
+                size="md"
+              />
+              {updating && (
+                <Button fullWidth loading>
+                  Update
+                </Button>
+              )}
+              {!updating && (
+                <Button fullWidth onClick={handleUpdateReptile}>
+                  Update
+                </Button>
+              )}
+            </form>
           )}
         </div>
       </Modal>

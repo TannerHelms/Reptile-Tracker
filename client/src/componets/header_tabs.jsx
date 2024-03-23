@@ -23,7 +23,6 @@ const HeaderTabs = ({ state, reptile, close, tab }) => {
         <Tabs
           defaultValue={tab || "Details"}
           variant="outline"
-          visibleFrom="sm"
           classNames={{
             root: classes.tabs,
             list: classes.tabsList,

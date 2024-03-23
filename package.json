@@ -28,7 +28,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    
+    "@mantine/notifications": "^7.6.2",
     "@prisma/client": "^5.9.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
