@@ -1,17 +1,13 @@
 import {
-  IconDashboard,
   IconLayoutDashboard,
   IconLogout,
-  IconPaperclip,
   IconSpider,
 } from "@tabler/icons-react";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import classes from "../css/navbar.module.css";
-import useAuth from "../hooks/use_auth";
-import { useDispatch } from "react-redux";
-import { logout } from "../store/auth_slice";
 import useInit from "../hooks/use_init";
+import { logout } from "../store/auth_slice";
 
 const data = [
   { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
@@ -54,7 +50,6 @@ function Navbar({ close }) {
   return (
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>{links}</div>
-
       <div className={classes.footer}>
         <a href="#" className={classes.link} onClick={handleSignOut}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
