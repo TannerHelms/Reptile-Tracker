@@ -16,7 +16,7 @@ import {
   IconDots,
   IconEye,
 } from "@tabler/icons-react";
-const ReptileTile = ({ reptile }) => {
+const ReptileTile = ({ reptile, details }) => {
   return (
     <Table.Tr key={reptile.id}>
       {/* Name of reptile and type */}
@@ -61,6 +61,7 @@ const ReptileTile = ({ reptile }) => {
 
             <Menu.Dropdown>
               <Menu.Item
+                onClick={() => details(reptile, "Details")}
                 leftSection={
                   <IconEye
                     style={{ width: rem(16), height: rem(16) }}
@@ -71,7 +72,9 @@ const ReptileTile = ({ reptile }) => {
                 View
               </Menu.Item>
               <Menu.Item
+              onClick={() => details(reptile, "Edit")}
                 leftSection={
+                  
                   <IconPencil
                     style={{ width: rem(16), height: rem(16) }}
                     stroke={1.5}

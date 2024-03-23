@@ -11,7 +11,8 @@
     "migrate-deploy": "prisma migrate deploy",
     "migrate-reset": "prisma migrate reset",
     "seed": "prisma db seed",
-    "console": "prisma-repl"
+    "console": "prisma-repl",
+    "studio": "prisma studio"
   },
   "license": "MIT",
   "devDependencies": {

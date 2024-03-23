@@ -11,15 +11,15 @@ import { logout } from "../store/auth_slice";
 
 const data = [
   { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
-  { link: "/reptiles", label: "Reptile", icon: IconSpider },
+  { link: "/reptiles", label: "Reptiles", icon: IconSpider },
 ];
 
 function Navbar({ close }) {
   const location = useLocation();
-  const [active, setActive] = useState(
-    location.pathname.substring(1).charAt(0).toUpperCase() +
-      location.pathname.slice(2).replace("_", " ")
-  );
+  const [active, setActive] = useState(location.pathname);
+
+  if (active === "/login") setActive("/dashboard");
+
   const { navigate, dispatch } = useInit();
 
   const handleSignOut = () => {
@@ -32,12 +32,12 @@ function Navbar({ close }) {
   const links = data.map((item) => (
     <a
       className={classes.link}
-      data-active={item.label === active || undefined}
+      data-active={item.link === active || undefined}
       href={item.link}
       key={item.label}
       onClick={(event) => {
         event.preventDefault();
-        setActive(item.label);
+        setActive(item.link);
         navigate(item.link);
         close();
       }}

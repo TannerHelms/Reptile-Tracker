@@ -1,51 +1,91 @@
-import { Button, List, Table, ThemeIcon, Tooltip, rem } from "@mantine/core";
+import { Button, List, Modal, Table, ThemeIcon, rem, TextInput, Select } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import ReptileTile from "../componets/reptile_tile";
 import TaskTile from "../componets/task_tile";
 import useAuth from "../hooks/use_auth";
-import reptiles from "../mock/reptile";
+import useReptile from "../hooks/use_reptile";
+import useSetQuery from "../hooks/use_set_query";
 import Schedule from "../mock/schedule";
-import useApi from "../hooks/use_api";
+import { useDisclosure } from "@mantine/hooks";
+import HeaderTabs from "../componets/header_tabs";
 
 const Dashboard = () => {
-  const api = useApi();
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [reptileFocus, setReptileFocus] = useState(null);
+  const [tab, setTab] = useState("Details");
+  const { getReptiles } = useReptile();
   const [tasks, setTasks] = useState(Schedule);
+  const { data: reptiles } = useSetQuery({
+    queryFn: getReptiles,
+    mutateFn: () => {},
+    key: "reptiles",
+  });
 
-  // console.log(tasks);
+  const completeTask = (id) => {
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+  };
 
   if (!user) {
     return null;
   }
 
-  const completeTask = (id) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
-  };
-  
-
-  //TODO: FIND A BETTER/PLACE WAY TO DO THIS
-  //-------------------------
-  const [reptiles, setReptiles] = useState([]);
-  useEffect(() => {
-    const fetchReptiles = async () => {
-      try {
-        const data = await api.get('/reptiles'); // Make a GET request to fetch user's reptiles
-        console.log(data)
-        setReptiles(data.reptiles);
-      } catch (error) {
-        console.error('Error fetching reptiles:', error);
-      }
-    };
-    if (user) {
-      fetchReptiles(); // Fetch reptiles only if user is logged in
-    }
-  }, [user]);
-  //-------------------------
   return (
     <>
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        padding={0}
+        withCloseButton={false}
+      >
+        <HeaderTabs state={setTab} reptile={reptileFocus} close={close} tab={tab}/>
+        <div className="p-4">
+          {tab === "Details" && (
+            <div className="flex flex-col gap-5">
+              <div className="flex justify-between">
+                <p>Species</p>
+                <p>{reptileFocus?.species.slice(0).replace("_", " ")}</p>
+              </div>
+              <div className="flex justify-between">
+                <p>Sex</p>
+                <p>{reptileFocus?.sex.toLocaleUpperCase()}</p>
+              </div>
+              <div className="flex justify-between">
+                <p>CreatedAt</p>
+                <p> {reptileFocus?.createdAt.split("T")[0]}</p>
+              </div>
+              <div className="flex justify-between">
+                <p>updatedAt</p>
+                <p> {reptileFocus?.updatedAt.split("T")[0]}</p>
+              </div>
+            </div>
+          )}
+          {tab === "Edit" && (
+           <form className="flex flex-col gap-5">
+            <TextInput
+              placeholder="Name"
+              defaultValue={reptileFocus?.name}
+              required
+              size="md"
+            />
+            <Select
+            data={["corn snake", "ball python", "king snake"]}
+            defaultValue={reptileFocus?.species.slice(0).replace("_", " ")}
+            size="md"
+            />
+            <Select
+            data={["M", "F"]}
+            defaultValue={reptileFocus.sex.toLocaleUpperCase()}
+            size="md"
+            />
+            <Button fullWidth>Update</Button>
+           </form>
+          )}
+        </div>
+      </Modal>
+
       <div className="flex flex-col gap-4">
         <p>Today's Schedule</p>
         <List
@@ -58,10 +98,10 @@ const Dashboard = () => {
           }
         >
           <div className="flex gap-5 overflow-x-auto p-3">
-            {tasks.map((task) => (
+            {tasks.map((task, idx) => (
               <div
                 className="flex flex-col gap-4 items-center w-60 p-3 rounded-lg shadow-md"
-                key={task.id}
+                key={idx}
                 style={{ backgroundColor: "#EEF2F3" }}
               >
                 <div className="flex flex-col gap-3 w-full overflow-x-auto">
@@ -94,8 +134,16 @@ const Dashboard = () => {
         <Table.ScrollContainer h={400}>
           <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
             <Table.Tbody>
-              {reptiles.map((reptile) => (
-                <ReptileTile key={reptile.id} reptile={reptile} />
+              {reptiles?.map((reptile) => (
+                <ReptileTile
+                  key={reptile.id}
+                  reptile={reptile}
+                  details={(reptile, tab) => {
+                    setReptileFocus(reptile);
+                    setTab(tab);
+                    open();
+                  }}
+                />
               ))}
             </Table.Tbody>
           </Table>

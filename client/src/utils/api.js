@@ -1,9 +1,10 @@
 import { createContext } from "react";
+import { store } from "../store/store";
 
 export class Api {
 
   async makeRequest(uri, method, body) {
-    const token = window.localStorage.getItem("jwt")
+    const token = store.getState().auth.token;
     const options = {
       method,
       headers: {
