@@ -11,12 +11,11 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { z } from "zod";
-import useApi from "../hooks/use_api";
+import useAuth from "../hooks/use_auth";
 import { login } from "../store/auth_slice";
+import useInit from "../hooks/use_init";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,9 +23,8 @@ const schema = z.object({
 });
 
 const Login = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const api = useApi();
+  const { user } = useAuth();
+  const { navigate, dispatch, api } = useInit();
   const form = useForm({
     initialValues: {
       email: "",
@@ -35,6 +33,12 @@ const Login = () => {
     validate: zodResolver(schema),
   });
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   async function handleLogin({ email, password }) {
     const { user, token } = await api.post("/sessions", {
@@ -47,6 +51,10 @@ const Login = () => {
     } else {
       setError("Invalid email or password");
     }
+  }
+
+  if (user) {
+    return null;
   }
 
   return (

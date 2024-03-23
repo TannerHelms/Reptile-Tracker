@@ -1,27 +1,26 @@
 import {
-  IconDashboard,
   IconLayoutDashboard,
   IconLogout,
-  IconPaperclip,
   IconSpider,
 } from "@tabler/icons-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import classes from "../css/navbar.module.css";
-import useAuth from "../hooks/use_auth";
-import { useDispatch } from "react-redux";
+import useInit from "../hooks/use_init";
 import { logout } from "../store/auth_slice";
 
 const data = [
-  { link: "/", label: "Dashboard", icon: IconLayoutDashboard },
+  { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
   { link: "/reptile", label: "Reptile", icon: IconSpider },
 ];
 
-function Navbar({ setPage, close }) {
-  const [active, setActive] = useState("Dashboard");
-  const navigate = useNavigate();
-  const { user } = useAuth();
-  const dispatch = useDispatch();
+function Navbar({ close }) {
+  const location = useLocation();
+  const [active, setActive] = useState(
+    location.pathname.substring(1).charAt(0).toUpperCase() +
+      location.pathname.slice(2).replace("_", " ")
+  );
+  const { navigate, dispatch } = useInit();
 
   const handleSignOut = () => {
     close();
@@ -39,7 +38,6 @@ function Navbar({ setPage, close }) {
       onClick={(event) => {
         event.preventDefault();
         setActive(item.label);
-        setPage(item.label);
         navigate(item.link);
         close();
       }}
@@ -52,7 +50,6 @@ function Navbar({ setPage, close }) {
   return (
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>{links}</div>
-
       <div className={classes.footer}>
         <a href="#" className={classes.link} onClick={handleSignOut}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
