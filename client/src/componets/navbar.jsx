@@ -11,7 +11,7 @@ import { logout } from "../store/auth_slice";
 
 const data = [
   { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
-  { link: "/reptile", label: "Reptile", icon: IconSpider },
+  { link: "/reptiles", label: "Reptile", icon: IconSpider },
 ];
 
 function Navbar({ close }) {

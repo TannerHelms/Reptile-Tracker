@@ -1,19 +1,21 @@
 import { Button, List, Table, ThemeIcon, Tooltip, rem } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReptileTile from "../componets/reptile_tile";
 import TaskTile from "../componets/task_tile";
 import useAuth from "../hooks/use_auth";
 import reptiles from "../mock/reptile";
 import Schedule from "../mock/schedule";
+import useApi from "../hooks/use_api";
 
 const Dashboard = () => {
+  const api = useApi();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState(Schedule);
 
-  console.log(tasks);
+  // console.log(tasks);
 
   if (!user) {
     return null;
@@ -22,7 +24,26 @@ const Dashboard = () => {
   const completeTask = (id) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
+  
 
+  //TODO: FIND A BETTER/PLACE WAY TO DO THIS
+  //-------------------------
+  const [reptiles, setReptiles] = useState([]);
+  useEffect(() => {
+    const fetchReptiles = async () => {
+      try {
+        const data = await api.get('/reptiles'); // Make a GET request to fetch user's reptiles
+        console.log(data)
+        setReptiles(data.reptiles);
+      } catch (error) {
+        console.error('Error fetching reptiles:', error);
+      }
+    };
+    if (user) {
+      fetchReptiles(); // Fetch reptiles only if user is logged in
+    }
+  }, [user]);
+  //-------------------------
   return (
     <>
       <div className="flex flex-col gap-4">

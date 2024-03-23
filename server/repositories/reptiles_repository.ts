@@ -22,21 +22,11 @@ export class ReptileRepository {
   }
 
   async createReptile({userId, species, name, sex}: CreateReptilePayload) {
-    // Check if the user with the provided userId exists
-    const userExists = await this.db.user.findUnique({
-      where: {
-        id: userId
-      }
-    });
-    if (!userExists) {
-      throw new Error('User with the provided userId does not exist');
-    }
     // Check if the provided species is allowed
     const allowedSpecies = ["ball_python", "king_snake", "corn_snake", "redtail_boa"];
     if (!allowedSpecies.includes(species)){
       throw new Error('Invalid species. Must be one of "ball_python", "king_snake", "corn_snake", "redtail_boa"')
     }
-
     // If the user exists and its an allowed species, proceed to create the reptile
     return this.db.reptile.create({
       data: {
@@ -48,11 +38,63 @@ export class ReptileRepository {
     });
   }
 
+  async getUsersReptiles(userId: number) {
+    return this.db.reptile.findMany({
+      where: {
+        userId: userId
+      },
+    });
+  }
+
   async getReptileById(id: number) {
-    return this.db.user.findUnique({
+    return this.db.reptile.findUnique({
       where: {
         id: id
       },
+    });
+  }
+
+  async updateReptile(reptileId: number, {userId, species, name, sex}: CreateReptilePayload) {
+    // Check if the reptile belongs to the user before updating
+    const existingReptile = await this.db.reptile.findFirst({
+      where: {
+        id: reptileId,
+        userId: userId
+      }
+    });
+    if (!existingReptile) {
+      throw new Error("Reptile not found or you don't have permission to update it");
+    }
+    // Update the reptile with the provided data
+    const updatedReptile = await this.db.reptile.update({
+      where: {
+        id: reptileId
+      },
+      data: {
+        species: species,
+        name: name,
+        sex: sex,
+      }
+    });
+    return updatedReptile;
+  }
+
+  async deleteReptile(reptileId: number, userId: number) {
+    // Check if the reptile belongs to the user before deleting
+    const existingReptile = await this.db.reptile.findFirst({
+      where: {
+        id: reptileId,
+        userId: userId
+      }
+    });
+    if (!existingReptile) {
+      throw new Error("Reptile not found or you don't have permission to delete it");
+    }
+    // Delete the reptile
+    await this.db.reptile.delete({
+      where: {
+        id: reptileId
+      }
     });
   }
 }
