@@ -18,11 +18,9 @@ import useAuth from "../hooks/use_auth";
 import useReptile from "../hooks/use_reptile";
 import useSetQuery from "../hooks/use_set_query";
 import Schedule from "../mock/schedule";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Dashboard = () => {
-  const user = useAuth();
-  console.log(user);
+  const { user, loading } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const [reptileFocus, setReptileFocus] = useState(null);
   const [tab, setTab] = useState("Details");
@@ -47,10 +45,7 @@ const Dashboard = () => {
     }, 2000);
   };
 
-  if (!user) {
-    return null;
-  }
-
+  if (loading || !user) return null;
   return (
     <>
       <Modal

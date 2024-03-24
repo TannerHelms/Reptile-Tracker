@@ -25,7 +25,7 @@ const schema = z.object({
 
 const Login = () => {
   const queryClient = useQueryClient();
-  const user = useAuth();
+  const { user } = useAuth();
   const { navigate, dispatch, api } = useInit();
   const form = useForm({
     initialValues: {

@@ -11,41 +11,36 @@ import useSetQuery from "./use_set_query";
 const noAuth = ["/login", "signup"]
 
 const useAuth = () => {
-    const location = useLocation();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const api = useApi();
-    const [redirect, setRedirect] = useState(false);
-    const { data } = useSetQuery({
+    const { data, isLoading } = useSetQuery({
         queryFn: async () => {
             const token = store.getState().auth.token;
-            // if (!token) return {error: "no token"}
-            const { user } = token ? await api.get("users/me") : { user: null };
-            console.log(user)
-            if (!user) {
-                setRedirect(true);
+            if (!token) {
+                return { user: null, isLoading: false, error: "No Token" }
             }
-            return user ? { user } : { error: "no user" };
+            const { user } = await api.get("users/me");
+            return { user };
         },
         mutateFn: () => { },
         key: "user"
     })
 
-
     useEffect(() => {
-        if (redirect && !noAuth.includes(location.pathname)) {
-            setRedirect(false);
+        if (data?.error) {
             navigate("/login");
         }
-    }, [redirect, data]);
-
-
+    }, [data]);
 
     if (data?.user) {
-        return data.user;
+        return { user: data.user };
     }
+    if (isLoading) return { user: null, loading: true, error: null };
 
-    return null;
+    if (data.user) return { user: data.user, loading: false };
+
+
+    return { user: null, loading: false, error: "no token" };
 }
 
 export default useAuth;
