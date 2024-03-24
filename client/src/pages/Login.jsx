@@ -17,6 +17,7 @@ import useAuth from "../hooks/use_auth";
 import { login } from "../store/auth_slice";
 import useInit from "../hooks/use_init";
 import { useQueryClient } from "@tanstack/react-query";
+import useSignIn from "../hooks/use_signin";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,6 +25,7 @@ const schema = z.object({
 });
 
 const Login = () => {
+  const { SignInMutation, error } = useSignIn();
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const { navigate, dispatch, api } = useInit();
@@ -34,7 +36,6 @@ const Login = () => {
     },
     validate: zodResolver(schema),
   });
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -43,17 +44,7 @@ const Login = () => {
   }, [user]);
 
   async function handleLogin({ email, password }) {
-    const { user, token } = await api.post("/sessions", {
-      email,
-      password,
-    });
-    if (user && token) {
-      await dispatch(login({ user, token }));
-      queryClient.invalidateQueries("user");
-      navigate("/");
-    } else {
-      setError("Invalid email or password");
-    }
+    await SignInMutation({ email, password });
   }
 
   if (user) {
@@ -78,7 +69,7 @@ const Login = () => {
           radius="md"
           className="flex"
         >
-          <p className="text-center text-red-600">{error && error}</p>
+          <p className="text-center text-red-600">{error && error.message}</p>
           <TextInput
             label="Email"
             placeholder="you@mantine.dev"

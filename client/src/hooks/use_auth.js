@@ -5,42 +5,21 @@ import { setUser } from "../store/auth_slice";
 import { store } from "../store/store";
 import useApi from "./use_api";
 import useSetQuery from "./use_set_query";
+import useUser from "./use_user";
 
-
-
-const noAuth = ["/login", "signup"]
 
 const useAuth = () => {
+    const { user, error, loading } = useUser();
     const navigate = useNavigate();
-    const api = useApi();
-    const { data, isLoading } = useSetQuery({
-        queryFn: async () => {
-            const token = store.getState().auth.token;
-            if (!token) {
-                return { user: null, isLoading: false, error: "No Token" }
-            }
-            const { user } = await api.get("users/me");
-            return { user };
-        },
-        mutateFn: () => { },
-        key: "user"
-    })
+    console.log(error)
+    if (loading) return { user: null, loading: true, error: null };
 
-    useEffect(() => {
-        if (data?.error) {
-            navigate("/login");
-        }
-    }, [data]);
+    if (error) {
+        navigate("/login");
+        return { user: null, loading: false, error: error };
+    };
 
-    if (data?.user) {
-        return { user: data.user };
-    }
-    if (isLoading) return { user: null, loading: true, error: null };
-
-    if (data.user) return { user: data.user, loading: false };
-
-
-    return { user: null, loading: false, error: "no token" };
+    return { user, loading: false, error: null }
 }
 
 export default useAuth;
