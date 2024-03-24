@@ -9,7 +9,7 @@
 
 **Description:** Creates a new reptile.  Output contains a new reptile object or an error.
 
-**Input:**
+**Body:**
 ```json
 {
   "species": "String (Species of the reptile)",
@@ -31,12 +31,10 @@
 **Method:** ```GET```
 
 **Description:** Given a reptile ID, this endpoint returns the corresponding reptile from the database or returns an error if it does not exist. The output will only contain either a reptile or an error.
-**Input:**
-```json
-{
-  "id": "Integer (Reptile ID)"
-}
-```
+
+**Body:**
+```None```
+
 **Output:**
 ```json
 {
@@ -52,7 +50,7 @@
 
 **Description:** Retrieves all reptiles of the authenticated user. Output will be a list of reptile objects that may or may not be empty, or it be an error.
 
-**Input:** ```None```
+**Body:** ```None```
 
 **Output:**
 ```json
@@ -71,10 +69,9 @@
 
 **Description:** Updates a specific reptile by its ID. Returns a reptile object or an error
 
-**Input:**
+**Body:**
 ```json
 {
-  "reptileId": "Integer (Reptile ID)",
   "species": "String (Species of the reptile)",
   "name": "String (Name of the reptile)",
   "sex": "String (Sex of the reptile, 'm' or 'f')"
@@ -96,12 +93,8 @@
 
 **Description:** Deletes a specific reptile by its ID. May return an error if one arises, otherwise nothing.
 
-**Input:**
-```json
-{
-  "reptileId": "Integer (Reptile ID)"
-}
-```
+**Body:**
+```None```
 
 **Output:**
 ```json
@@ -110,16 +103,119 @@
 }
 
 ```
+## Feeding Controller
+
+### Creating A New Feeding Record
+**Endpoint:** ```/feedings/```
+
+**Method:** ```Post```
+
+**Description:** Creates a new feeding record for a reptile. Output contains a new feeding record object or an error.
+
+**Body:**
+```json
+{
+  "reptileId": "Integer (Reptile ID)",
+  "foodItem": "String (Food item given to the reptile)"
+}
+```
+
+**Output:**
+```json
+{
+  "feeding?",
+  "error?"
+}
+```
+
+### Getting All Feedings for a Specific Reptile
+**Endpoint:** ```/feedings/reptile/:repitleId```
+
+**Method:** ```GET```
+
+**Description:** Retrieves all feeding records for a specific reptile. Output will be a list of feeding record objects that may or may not be empty, or it may return an error.
+
+**Body:**
+```None```
+
+**Output:**
+```json
+{
+  "feedings?": [
+    {"feeding"}
+  ],
+  "error?"
+}
+```
+
+### Getting a Specific Feeding Record By Id
+**Endpoint:** ```/feedings/:feedingId```
+
+**Method:** ```GET```
+
+**Description:** Given a feeding record ID, this endpoint returns the corresponding feeding record from the database or returns an error if it does not exist. The output will only contain either a feeding record or an error.
+
+**Body:**
+```None```
+
+**Output:**
+```json
+{
+  "feeding?",
+  "error?"
+}
+```
+
+### Updating a Specific Feeding Record By Id
+**Endpoint:** ```/feedings/:feedingId```
+
+**Method:** ```PUT```
+
+**Description:** Updates a specific feeding record by its ID. Returns a feeding record object or an error.
+
+**Body:**
+```json
+{
+  "reptileId": "Integer (Reptile Id)",
+  "foodItem": "String (Updated food item)"
+}
+```
+
+**Output:**
+```json
+{
+  "updatedFeeding?",
+  "error?"
+}
+```
+
+### Deleting a Specific Feeding Record By Id
+**Endpoint:** ```/feedings/:feedingId```
+
+**Method:** ```DELETE```
+
+**Description:** Deletes a specific feeding record by its ID. May return an error if one arises, otherwise nothing.
+
+**Body:**
+```None```
+
+**Output:**
+```json
+{
+  "error?"
+}
+```
+
 
 
 ### 
-**Endpoint:** ```/reptile/```
+**Endpoint:** ```/feedings/```
 
 **Method:** ``` ```
 
 **Description:** 
 
-**Input:**
+**Body:**
 ```json
 {
 }

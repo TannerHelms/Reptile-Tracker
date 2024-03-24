@@ -9,7 +9,7 @@ export const buildReptilesController = (reptileRepository: ReptileRepository) =>
   // Create a new reptile
   router.post("/", authMiddleware, async (req, res) => {
     if (!req.user) {
-    return res.status(401).json({ error: "User not authenticated" });
+      return res.status(401).json({ error: "User not authenticated" });
     }
     const { species, name, sex } = req.body; // Destructure species, name, and sex from the request body
     const userId = req.user.id; // Extract userId from req.user
@@ -20,17 +20,16 @@ export const buildReptilesController = (reptileRepository: ReptileRepository) =>
         name: name,
         sex: sex
     });
-    res.status(200).json({ reptile });
+      res.status(200).json({ reptile });
     } catch (error) {
-    res.status(500).json({ error: "Error creating reptile" });
+      res.status(500).json({ error: "Error creating reptile" });
     }
   });
-  
 
   // Get all reptiles of the authenticated user
   router.get("/", authMiddleware, async (req, res) => {
     if (!req.user) {
-        return res.status(401).json({ error: "User not authenticated" });
+      return res.status(401).json({ error: "User not authenticated" });
     }
     const userId = req.user.id; // Extract userId from JWT payload
     const reptiles = await reptileRepository.getUsersReptiles(userId); // Assuming getReptilesByUserId method exists in your repository
@@ -61,7 +60,6 @@ export const buildReptilesController = (reptileRepository: ReptileRepository) =>
       res.status(500).json({ error: "Internal server error" });
     }
   });
-  
 
   // Update a specific reptile by ID
   router.put("/:reptileId", authMiddleware, async (req, res) => {
@@ -81,8 +79,6 @@ export const buildReptilesController = (reptileRepository: ReptileRepository) =>
       res.status(500).json({ error: "Internal server error" });
     }
   });
-
-  
   
   // Delete a specific reptile by ID
   router.delete("/:reptileId", authMiddleware, async (req, res) => {
@@ -102,8 +98,5 @@ export const buildReptilesController = (reptileRepository: ReptileRepository) =>
     }
   });
   
-
   return router;
 };
-
-
