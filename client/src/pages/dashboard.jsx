@@ -2,26 +2,27 @@ import {
   Button,
   List,
   Modal,
+  Select,
   Table,
+  TextInput,
   ThemeIcon,
   rem,
-  TextInput,
-  Select,
 } from "@mantine/core";
-import { IconCheck, IconCircleCheck } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import { IconCircleCheck } from "@tabler/icons-react";
 import { useState } from "react";
+import HeaderTabs from "../componets/header_tabs";
 import ReptileTile from "../componets/reptile_tile";
 import TaskTile from "../componets/task_tile";
 import useAuth from "../hooks/use_auth";
 import useReptile from "../hooks/use_reptile";
 import useSetQuery from "../hooks/use_set_query";
 import Schedule from "../mock/schedule";
-import { useDisclosure } from "@mantine/hooks";
-import HeaderTabs from "../componets/header_tabs";
-import { notifications } from "@mantine/notifications";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const user = useAuth();
+  console.log(user);
   const [opened, { open, close }] = useDisclosure(false);
   const [reptileFocus, setReptileFocus] = useState(null);
   const [tab, setTab] = useState("Details");

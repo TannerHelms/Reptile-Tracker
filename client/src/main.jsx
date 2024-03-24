@@ -16,7 +16,12 @@ import Reptile from "./pages/reptile.jsx";
 import { persistor, store } from "./store/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 import Login from "./pages/login.jsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const router = createHashRouter([
   {
     path: "",
@@ -46,7 +51,16 @@ const router = createHashRouter([
   },
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 10, // 10 minutes
+      cacheTime: 1000 * 60 * 15, // 15 minutes
+    },
+  },
+});
+
+// export const queryCache = new QueryCache();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -59,6 +73,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </UserProvider>
           </ApiContext.Provider>
         </MantineProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </PersistGate>
   </Provider>

@@ -16,6 +16,7 @@ import { z } from "zod";
 import useAuth from "../hooks/use_auth";
 import { login } from "../store/auth_slice";
 import useInit from "../hooks/use_init";
+import { useQueryClient } from "@tanstack/react-query";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -23,7 +24,8 @@ const schema = z.object({
 });
 
 const Login = () => {
-  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const user = useAuth();
   const { navigate, dispatch, api } = useInit();
   const form = useForm({
     initialValues: {
@@ -46,7 +48,8 @@ const Login = () => {
       password,
     });
     if (user && token) {
-      dispatch(login({ user, token }));
+      await dispatch(login({ user, token }));
+      queryClient.invalidateQueries("user");
       navigate("/");
     } else {
       setError("Invalid email or password");

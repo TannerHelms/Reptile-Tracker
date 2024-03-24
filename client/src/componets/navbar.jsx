@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import classes from "../css/navbar.module.css";
 import useInit from "../hooks/use_init";
 import { logout } from "../store/auth_slice";
+import { useQueryClient } from "@tanstack/react-query";
 
 const data = [
   { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
@@ -15,6 +16,7 @@ const data = [
 ];
 
 function Navbar({ close }) {
+  const queryClient = useQueryClient();
   const location = useLocation();
   const [active, setActive] = useState(location.pathname);
 
@@ -22,11 +24,11 @@ function Navbar({ close }) {
 
   const { navigate, dispatch } = useInit();
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     close();
-    window.localStorage.removeItem("jwt");
-    dispatch(logout());
-    navigate("/login");
+    await dispatch(logout());
+    await navigate("/login");
+    queryClient.invalidateQueries("user");
   };
 
   const links = data.map((item) => (

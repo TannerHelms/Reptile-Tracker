@@ -6,7 +6,7 @@ import useAuth from "./hooks/use_auth";
 import { useState } from "react";
 
 const App = () => {
-  const { user } = useAuth(false);
+  const user = useAuth();
   const [opened, { toggle }] = useDisclosure();
   const page = useLocation().pathname.substring(1);
   if (!user) {
