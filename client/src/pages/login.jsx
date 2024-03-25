@@ -20,7 +20,7 @@ const schema = z.object({
 });
 
 const Login = () => {
-  const { login } = useLogin();
+  const { login, error } = useLogin();
   const form = useForm({
     initialValues: {
       email: "",
@@ -29,16 +29,9 @@ const Login = () => {
     validate: zodResolver(schema),
   });
 
-  async function handleLogin({ email, password }) {
-    await login({ email, password });
-  }
-
   return (
     <Center className="w-screen h-screen background-gradient">
-      <form
-        onSubmit={form.onSubmit((values) => handleLogin(values))}
-        className="w-600"
-      >
+      <form onSubmit={form.onSubmit(login)} className="w-600">
         <Title ta="center" className="font-black">
           Reptile Tracker!
         </Title>
@@ -51,7 +44,7 @@ const Login = () => {
           radius="md"
           className="flex"
         >
-          {/* <p className="text-center text-red-600">{error && error}</p> */}
+          <p className="text-center text-red-600">{error && error.message}</p>
           <TextInput
             label="Email"
             placeholder="you@mantine.dev"

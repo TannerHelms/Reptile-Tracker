@@ -14,27 +14,18 @@ const useLogin = () => {
     const user = queryClient.getQueryData(["user"]);
 
     useEffect(() => {
-        if (user?.user) navigate("/");
+        if (user) navigate("/");
     }, [user])
 
-    const login = async ({ email, password }) => {
-        const { user, token } = await api.post("/sessions", { email, password });
-        if (!user || !token) throw new Error("Invalid email or password");
-        return { user, token };
-    }
-
-    const { mutateAsync: loginMutation } = useMutation({
-        mutationFn: login,
+    const { mutateAsync: loginMutation, error } = useMutation({
+        mutationFn: ({ email, password }) => api.post("/sessions", { email, password }),
         onSuccess: async ({ user, token }) => {
-            queryClient.setQueryData(["user"], { user });
+            queryClient.setQueryData(["user"], user);
             dispatch(setToken({ token }))
         },
-        onError: (error) => {
-
-        }
     });
 
-    return { login: loginMutation, };
+    return { login: loginMutation, error };
 }
 
 export default useLogin;

@@ -56,6 +56,8 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 1000 * 60 * 10, // 10 minutes
       cacheTime: 1000 * 60 * 15, // 15 minutes
+      useErrorBoundary: true,
+      retry: 0,
     },
   },
 });

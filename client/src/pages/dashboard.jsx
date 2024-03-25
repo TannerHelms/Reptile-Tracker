@@ -19,7 +19,7 @@ import useReptiles from "../hooks/use_reptiles";
 import Schedule from "../mock/schedule";
 
 const Dashboard = () => {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const [reptileFocus, setReptileFocus] = useState(null);
   const [tab, setTab] = useState("Details");
@@ -31,20 +31,7 @@ const Dashboard = () => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
 
-  const handleUpdateReptile = () => {
-    setUpdating(true);
-
-    setTimeout(() => {
-      setUpdating(false);
-    }, 2000);
-  };
-
-  if (loading) return null;
-
-  // if (error) {
-  //   console.log(error);
-  //   return null;
-  // }
+  if (isLoading) return null;
 
   if (!user) {
     return null;

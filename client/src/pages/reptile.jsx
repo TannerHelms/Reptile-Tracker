@@ -1,9 +1,9 @@
 import useAuth from "../hooks/use_auth";
 
 const Reptile = () => {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
 
-  if (loading) return null;
+  if (isLoading) return null;
 
   return <h1>This is the Reptile Page</h1>;
 };

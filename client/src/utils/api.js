@@ -17,7 +17,11 @@ export class Api {
       options.body = JSON.stringify(body);
     }
     const res = await fetch(uri, options);
-    return res.json();
+    if (res.ok) {
+      return res.json();
+    }
+    const error = await res.json();
+    throw new Error(error.error);
   }
 
   get(uri) {

@@ -6,9 +6,7 @@ const useReptiles = () => {
 
     const getReptiles = async () => {
         const { reptiles, error } = await api.get("/reptiles");
-        if (error) {
-            throw new Error(error);
-        }
+        if (error) throw new Error(error);
         return reptiles;
     }
 
