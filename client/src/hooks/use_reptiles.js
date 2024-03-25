@@ -4,10 +4,15 @@ import useApi from "./use_api";
 const useReptiles = () => {
     const api = useApi();
 
-    const { data: reptiles, error, isLoading } = useQuery({
+    const getReptiles = () => api.get("/reptiles");
+
+    const query = {
         queryKey: ["reptiles"],
-        queryFn: () => api.get("/reptiles"),
-    });
+        queryFn: getReptiles,
+    }
+
+    // { reptiles, error }
+    const { data: reptiles, error, isLoading } = useQuery(query);
 
     return { reptiles: reptiles?.reptiles, error, isLoading }
 }

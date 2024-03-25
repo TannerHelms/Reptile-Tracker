@@ -7,19 +7,27 @@ import useInit from "./use_init";
 const useLogin = () => {
     const { api, dispatch, navigate } = useInit();
     const queryClient = useQueryClient();
-    const user = queryClient.getQueryData(["user"]);
+    const user = queryClient.getQueryData("user");
 
     useEffect(() => {
         if (user) navigate("/");
     }, [user])
 
-    const { mutateAsync: loginMutation, error } = useMutation({
-        mutationFn: ({ email, password }) => api.post("/sessions", { email, password }),
+    const login = ({ email, password }) => {
+        console.log(email, password);
+        return api.post("/sessions", { email, password })
+    };
+
+    const mutate = {
+        queryKey: ["user"],
+        mutationFn: login,
         onSuccess: ({ user, token }) => {
-            queryClient.setQueryData(["user"], user);
+            queryClient.setQueryData("user", user);
             dispatch(setToken({ token }))
         },
-    });
+    }
+
+    const { mutateAsync: loginMutation, error } = useMutation(mutate);
 
     return { login: loginMutation, error };
 }

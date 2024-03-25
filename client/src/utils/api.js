@@ -1,8 +1,8 @@
 import { createContext } from "react";
+import axios from "axios";
 import { store } from "../store/store";
 
 export class Api {
-
   async makeRequest(uri, method, body) {
     const token = store.getState().token.value;
     const options = {
@@ -11,33 +11,34 @@ export class Api {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json"
       },
-    }
+    };
 
     if (body) {
-      options.body = JSON.stringify(body);
+      options.data = body;
     }
-    const res = await fetch(uri, options);
-    if (res.ok) {
-      return res.json();
+
+    try {
+      const res = await axios(uri, options);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
     }
-    const error = await res.json();
-    throw new Error(error.error);
   }
 
   get(uri) {
-    return this.makeRequest(uri, "get")
+    return this.makeRequest(uri, "get");
   }
 
   post(uri, body) {
-    return this.makeRequest(uri, "post", body)
+    return this.makeRequest(uri, "post", body);
   }
 
   put(uri, body) {
-    return this.makeRequest(uri, "put", body)
+    return this.makeRequest(uri, "put", body);
   }
 
   del(uri) {
-    return this.makeRequest(uri, "del")
+    return this.makeRequest(uri, "delete");
   }
 }
 

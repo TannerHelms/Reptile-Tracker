@@ -6,10 +6,14 @@ import useInit from "./use_init";
 const useAuth = () => {
     const { api, navigate, dispatch } = useInit();
 
-    const { data: user, isLoading, error } = useQuery({
+    const getMe = () => api.get("/users/me");
+
+    const query = {
         queryKey: ["user"],
-        queryFn: () => api.get("/users/me"),
-    });
+        queryFn: getMe,
+    }
+
+    const { data: user, isLoading, error } = useQuery(query);
 
     useEffect(() => {
         if (error) navigate("/login");
