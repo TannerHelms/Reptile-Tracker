@@ -102,6 +102,41 @@ export const buildReptilesController = (reptileRepository: ReptileRepository) =>
     }
   });
   
+  router.post("/:reptileId/husbandry", authMiddleware, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ error: "User not authenticated" });
+    }
+    const { length, weight, temperature, humidity } = req.body;
+    const reptileId = Number(req.params.reptileId);
+
+    try {
+      const husbandryRecord = await reptileRepository.addHusbandryRecord({
+        reptileId,
+        length,
+        weight,
+        temperature,
+        humidity,
+      });
+      res.status(200).json({ husbandryRecord });
+    } catch (error) {
+      res.status(500).json({ error: "Error adding husbandry record" });
+    }
+  });
+
+  // Get all husbandry records for a reptile
+  router.get("/:reptileId/husbandry", authMiddleware, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ error: "User not authenticated" });
+    }
+    const reptileId = Number(req.params.reptileId);
+
+    try {
+      const husbandryRecords = await reptileRepository.getHusbandryRecords(reptileId);
+      res.status(200).json({ husbandryRecords });
+    } catch (error) {
+      res.status(500).json({ error: "Error retrieving husbandry records" });
+    }
+  });
 
   return router;
 };

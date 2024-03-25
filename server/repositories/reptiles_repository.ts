@@ -97,4 +97,24 @@ export class ReptileRepository {
       }
     });
   }
+
+  async addHusbandryRecord({ reptileId, length, weight, temperature, humidity }): Promise<any> {
+    return this.db.husbandryRecord.create({
+      data: {
+        reptileId,
+        length,
+        weight,
+        temperature,
+        humidity,
+      },
+    });
+  }
+
+  async getHusbandryRecords(reptileId: number): Promise<any[]> {
+    return this.db.husbandryRecord.findMany({
+      where: {
+        reptileId,
+      },
+    });
+  }
 }
