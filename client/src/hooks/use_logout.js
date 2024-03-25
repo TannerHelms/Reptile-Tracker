@@ -1,16 +1,17 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
-import { logout as logoutFn } from "../store/auth_slice";
+import { turnOffNavbar } from "../store/navbar_slice";
+import { clearToken } from "../store/token_slice";
 
 const useLogout = () => {
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
     const logout = () => {
-        dispatch(logoutFn());
-        queryClient.setQueryData(["user"], null);
+        dispatch(turnOffNavbar());
+        dispatch(clearToken());
+        queryClient.removeQueries();
     }
     return { logout }
-
 }
 
 export default useLogout;

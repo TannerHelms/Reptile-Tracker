@@ -4,7 +4,7 @@ import { store } from "../store/store";
 export class Api {
 
   async makeRequest(uri, method, body) {
-    const token = store.getState().auth.token;
+    const token = store.getState().token.value;
     const options = {
       method,
       headers: {
