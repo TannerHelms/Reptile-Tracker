@@ -1,16 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { setToken } from "../store/token_slice";
-import useApi from "./use_api";
+import useInit from "./use_init";
 
 
 const useLogin = () => {
-    const api = useApi();
-    const dispatch = useDispatch();
+    const { api, dispatch, navigate } = useInit();
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
     const user = queryClient.getQueryData(["user"]);
 
     useEffect(() => {
@@ -19,7 +15,7 @@ const useLogin = () => {
 
     const { mutateAsync: loginMutation, error } = useMutation({
         mutationFn: ({ email, password }) => api.post("/sessions", { email, password }),
-        onSuccess: async ({ user, token }) => {
+        onSuccess: ({ user, token }) => {
             queryClient.setQueryData(["user"], user);
             dispatch(setToken({ token }))
         },
