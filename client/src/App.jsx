@@ -6,9 +6,12 @@ import useAuth from "./hooks/use_auth";
 import { useState } from "react";
 
 const App = () => {
-  const user = useAuth();
+  const { user, loading } = useAuth();
   const [opened, { toggle }] = useDisclosure();
   const page = useLocation().pathname.substring(1);
+
+  if (loading) return null;
+
   if (!user) {
     return <Outlet />;
   }

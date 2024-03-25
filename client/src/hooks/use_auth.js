@@ -1,51 +1,31 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { setUser } from "../store/auth_slice";
-import { store } from "../store/store";
 import useApi from "./use_api";
-import useSetQuery from "./use_set_query";
-
-
-
-const noAuth = ["/login", "signup"]
 
 const useAuth = () => {
-    const location = useLocation();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const api = useApi();
-    const [redirect, setRedirect] = useState(false);
-    const { data } = useSetQuery({
-        queryFn: async () => {
-            const token = store.getState().auth.token;
-            // if (!token) return {error: "no token"}
-            const { user } = token ? await api.get("users/me") : { user: null };
-            console.log(user)
-            if (!user) {
-                setRedirect(true);
-            }
-            return user ? { user } : { error: "no user" };
-        },
-        mutateFn: () => { },
-        key: "user"
-    })
-
+    const { data, isLoading } = useQuery({
+        queryKey: ["user"],
+        queryFn: () => api.get("/users/me"),
+        throwOnError: true,
+    });
 
     useEffect(() => {
-        if (redirect && !noAuth.includes(location.pathname)) {
-            setRedirect(false);
-            navigate("/login");
+        if (data?.error) {
+            navigate("/login")
         }
-    }, [redirect, data]);
+        if (data?.user == null && !isLoading) {
+            navigate("/login")
+        }
+    }, [data])
 
+    if (isLoading) return { user: null, loading: isLoading };
 
+    if (data?.user) return { user: data.user, loading: isLoading };
 
-    if (data?.user) {
-        return data.user;
-    }
-
-    return null;
+    return { user: null, loading: isLoading };
 }
 
 export default useAuth;

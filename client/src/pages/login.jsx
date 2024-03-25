@@ -11,12 +11,8 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useEffect, useState } from "react";
 import { z } from "zod";
-import useAuth from "../hooks/use_auth";
-import { login } from "../store/auth_slice";
-import useInit from "../hooks/use_init";
-import { useQueryClient } from "@tanstack/react-query";
+import useLogin from "../hooks/use_login";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,9 +20,7 @@ const schema = z.object({
 });
 
 const Login = () => {
-  const queryClient = useQueryClient();
-  const user = useAuth();
-  const { navigate, dispatch, api } = useInit();
+  const { login, error, load } = useLogin();
   const form = useForm({
     initialValues: {
       email: "",
@@ -34,31 +28,12 @@ const Login = () => {
     },
     validate: zodResolver(schema),
   });
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user]);
 
   async function handleLogin({ email, password }) {
-    const { user, token } = await api.post("/sessions", {
-      email,
-      password,
-    });
-    if (user && token) {
-      await dispatch(login({ user, token }));
-      queryClient.invalidateQueries("user");
-      navigate("/");
-    } else {
-      setError("Invalid email or password");
-    }
+    login({ email, password });
   }
 
-  if (user) {
-    return null;
-  }
+  if (load) return null;
 
   return (
     <Center className="w-screen h-screen background-gradient">

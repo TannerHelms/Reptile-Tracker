@@ -15,25 +15,17 @@ import HeaderTabs from "../componets/header_tabs";
 import ReptileTile from "../componets/reptile_tile";
 import TaskTile from "../componets/task_tile";
 import useAuth from "../hooks/use_auth";
-import useReptile from "../hooks/use_reptile";
-import useSetQuery from "../hooks/use_set_query";
+import useReptiles from "../hooks/use_reptiles";
 import Schedule from "../mock/schedule";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Dashboard = () => {
-  const user = useAuth();
-  console.log(user);
+  const { user, loading } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const [reptileFocus, setReptileFocus] = useState(null);
   const [tab, setTab] = useState("Details");
   const [updating, setUpdating] = useState(false);
-  const { getReptiles } = useReptile();
   const [tasks, setTasks] = useState(Schedule);
-  const { data: reptiles } = useSetQuery({
-    queryFn: getReptiles,
-    mutateFn: () => {},
-    key: "reptiles",
-  });
+  const { reptiles } = useReptiles();
 
   const completeTask = (id) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
@@ -46,6 +38,13 @@ const Dashboard = () => {
       setUpdating(false);
     }, 2000);
   };
+
+  if (loading) return null;
+
+  // if (error) {
+  //   console.log(error);
+  //   return null;
+  // }
 
   if (!user) {
     return null;
