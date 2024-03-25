@@ -32,11 +32,11 @@ const useLogin = () => {
     const { mutateAsync: loginMutation } = useMutation({
         mutationFn: login,
         onSuccess: async ({ user, token }) => {
+            navigate("/")
             console.log('resolved')
             queryClient.setQueryData(["user"], { user });
             queryClient.setQueryData(["token"], token);
-            await dispatch(loginFn({ user, token }));
-            navigate("/")
+            dispatch(loginFn({ user, token }));
             return { user, token }
         },
         onError: (error) => {
