@@ -10,13 +10,14 @@ const useLogin = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const user = queryClient.getQueryData(["user"]);
-    const [load, setLoading] = useState(false);
+
 
     useEffect(() => {
         if (user?.user) navigate("/");
     }, [user])
 
     const login = async ({ email, password }) => {
+
         const { user, token } = await api.post("/sessions", {
             email,
             password,
@@ -24,23 +25,25 @@ const useLogin = () => {
         if (!user || !token) {
             throw new Error("Invalid email or password");
         }
-        queryClient.setQueryData(["user"], { user });
-        queryClient.setQueryData(["token"], token);
-        await dispatch(loginFn({ user, token }));
+
         return { user, token };
     }
 
-    const { mutateAsync: loginMutation, data, error, isLoading, status } = useMutation({
+    const { mutateAsync: loginMutation } = useMutation({
         mutationFn: login,
         onSuccess: async ({ user, token }) => {
+            console.log('resolved')
+            queryClient.setQueryData(["user"], { user });
+            queryClient.setQueryData(["token"], token);
+            await dispatch(loginFn({ user, token }));
             navigate("/")
-            // return { user, token }
+            return { user, token }
         },
         onError: (error) => {
             console.error(error);
         }
     });
-    return { login: loginMutation, load, user, status };
+    return { login: loginMutation };
 }
 
 export default useLogin;
