@@ -13,7 +13,6 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import useLogin from "../hooks/use_login";
-import { useState } from "react";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -22,7 +21,6 @@ const schema = z.object({
 
 const Login = () => {
   const { login } = useLogin();
-
   const form = useForm({
     initialValues: {
       email: "",
@@ -32,11 +30,8 @@ const Login = () => {
   });
 
   async function handleLogin({ email, password }) {
-    const resp = await login({ email, password });
-    console.log(resp);
+    await login({ email, password });
   }
-
-  // if (load) return "loading";
 
   return (
     <Center className="w-screen h-screen background-gradient">

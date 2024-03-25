@@ -19,7 +19,6 @@ import useReptiles from "../hooks/use_reptiles";
 import Schedule from "../mock/schedule";
 
 const Dashboard = () => {
-  console.log("dashboard render");
   const { user, loading } = useAuth();
   const [opened, { open, close }] = useDisclosure(false);
   const [reptileFocus, setReptileFocus] = useState(null);

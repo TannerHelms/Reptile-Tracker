@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { Api } from "../utils/api";
 import useApi from "./use_api";
 
 const useReptiles = () => {

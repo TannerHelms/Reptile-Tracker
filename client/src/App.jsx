@@ -5,6 +5,10 @@ import Navbar from "./componets/navbar";
 import useAuth from "./hooks/use_auth";
 import { useState } from "react";
 
+
+// todo: check if route is on a auth page or not 
+
+
 const App = () => {
   const { user, loading } = useAuth();
   const [opened, { toggle }] = useDisclosure();
