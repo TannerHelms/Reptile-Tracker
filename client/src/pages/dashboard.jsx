@@ -1,3 +1,4 @@
+import { Reptile_modal } from "./reptile_modal";
 import {
   Button,
   List,
@@ -17,6 +18,7 @@ import TaskTile from "../componets/task_tile";
 import useAuth from "../hooks/use_auth";
 import useReptiles from "../hooks/use_reptiles";
 import Schedule from "../mock/schedule";
+import useReptile from "../hooks/use_reptile";
 
 const Dashboard = () => {
   const { user, isLoading } = useAuth();
@@ -26,10 +28,13 @@ const Dashboard = () => {
   const [updating, setUpdating] = useState(false);
   const [tasks, setTasks] = useState(Schedule);
   const { reptiles } = useReptiles();
+  const { updateReptile } = useReptile();
 
   const completeTask = (id) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
+
+  const handleUpdateReptile = () => {};
 
   if (isLoading) return null;
 
@@ -52,58 +57,21 @@ const Dashboard = () => {
           close={close}
           tab={tab}
         />
-        <div className="p-4">
-          {tab === "Details" && (
-            <div className="flex flex-col gap-5">
-              <div className="flex justify-between">
-                <p>Species</p>
-                <p>{reptileFocus?.species.slice(0).replace("_", " ")}</p>
-              </div>
-              <div className="flex justify-between">
-                <p>Sex</p>
-                <p>{reptileFocus?.sex.toLocaleUpperCase()}</p>
-              </div>
-              <div className="flex justify-between">
-                <p>CreatedAt</p>
-                <p> {reptileFocus?.createdAt.split("T")[0]}</p>
-              </div>
-              <div className="flex justify-between">
-                <p>updatedAt</p>
-                <p> {reptileFocus?.updatedAt.split("T")[0]}</p>
-              </div>
-            </div>
-          )}
-          {tab === "Edit" && (
-            <form className="flex flex-col gap-5">
-              <TextInput
-                placeholder="Name"
-                defaultValue={reptileFocus?.name}
-                required
-                size="md"
-              />
-              <Select
-                data={["corn snake", "ball python", "king snake"]}
-                defaultValue={reptileFocus?.species.slice(0).replace("_", " ")}
-                size="md"
-              />
-              <Select
-                data={["M", "F"]}
-                defaultValue={reptileFocus.sex.toLocaleUpperCase()}
-                size="md"
-              />
-              {updating && (
-                <Button fullWidth loading>
-                  Update
-                </Button>
-              )}
-              {!updating && (
-                <Button fullWidth onClick={handleUpdateReptile}>
-                  Update
-                </Button>
-              )}
-            </form>
-          )}
-        </div>
+        <Reptile_modal
+          tab={tab}
+          reptileFocus={reptileFocus}
+          species={species}
+          slice={slice}
+          replace={replace}
+          sex={sex}
+          toLocaleUpperCase={toLocaleUpperCase}
+          createdAt={createdAt}
+          split={split}
+          updatedAt={updatedAt}
+          name={name}
+          updating={updating}
+          handleUpdateReptile={handleUpdateReptile}
+        />
       </Modal>
 
       <div className="flex flex-col gap-4">
