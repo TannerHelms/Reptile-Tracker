@@ -16,7 +16,7 @@ const useAuth = () => {
         if (user) dispatch(turnOnNavbar())
     }, [user, error])
 
-    return { user, isLoading };
+    return { user: user?.id ? user : user?.user, isLoading };
 }
 
 export default useAuth;
