@@ -6,19 +6,18 @@ import useInit from "./use_init";
 const useCheckAuth = () => {
     const { api, navigate, dispatch } = useInit();
     const [isLoading, setIsLoading] = useState(true);
+
     const getMe = () => api.get("/users/me");
 
-    const query = {
+    const { data: user, error } = useQuery({
         queryKey: ["user"],
         queryFn: getMe,
-    }
-
-    const { data: user, error } = useQuery(query);
+    });
 
     useEffect(() => {
         if (user) {
-            dispatch(turnOnNavbar());
             navigate("/")
+            dispatch(turnOnNavbar());
         }
         if (error) {
             setIsLoading(false);
