@@ -16,7 +16,7 @@ import {
   IconDots,
   IconEye,
 } from "@tabler/icons-react";
-const ReptileTile = ({ reptile, details }) => {
+const ReptileTile = ({ reptile, details, deleteFn }) => {
   return (
     <Table.Tr key={reptile.id}>
       {/* Name of reptile and type */}
@@ -39,7 +39,7 @@ const ReptileTile = ({ reptile, details }) => {
       {/* Created at */}
       <Table.Td>
         <Text fz="xs" c="dimmed">
-          {reptile.createdAt.toLocaleString({ timeStyle: "short" })}
+          {reptile.createdAt.split("T")[0]}
         </Text>
       </Table.Td>
       <Table.Td>
@@ -72,9 +72,8 @@ const ReptileTile = ({ reptile, details }) => {
                 View
               </Menu.Item>
               <Menu.Item
-              onClick={() => details(reptile, "Edit")}
+                onClick={() => details(reptile, "Edit")}
                 leftSection={
-                  
                   <IconPencil
                     style={{ width: rem(16), height: rem(16) }}
                     stroke={1.5}
@@ -84,6 +83,7 @@ const ReptileTile = ({ reptile, details }) => {
                 Edit
               </Menu.Item>
               <Menu.Item
+                onClick={() => deleteFn(reptile)}
                 leftSection={
                   <IconTrash
                     style={{ width: rem(16), height: rem(16) }}

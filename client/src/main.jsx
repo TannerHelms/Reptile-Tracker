@@ -24,6 +24,8 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Notifications } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
+
 const router = createHashRouter([
   {
     path: "",
@@ -72,11 +74,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={appTheme}>
           <Notifications />
-          <ApiContext.Provider value={new Api()}>
-            <UserProvider>
-              <RouterProvider router={router} />
-            </UserProvider>
-          </ApiContext.Provider>
+          <ModalsProvider>
+            <ApiContext.Provider value={new Api()}>
+              <UserProvider>
+                <RouterProvider router={router} />
+              </UserProvider>
+            </ApiContext.Provider>
+          </ModalsProvider>
         </MantineProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

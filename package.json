@@ -12,7 +12,8 @@
     "migrate-reset": "prisma migrate reset",
     "seed": "prisma db seed",
     "console": "prisma-repl",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "reset": "prisma migrate reset --skip-seed"
   },
   "license": "MIT",
   "devDependencies": {

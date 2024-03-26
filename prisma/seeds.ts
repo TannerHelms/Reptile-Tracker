@@ -29,7 +29,7 @@ async function main() {
       password_hash: bcrypt.hashSync(process.env.ADMIN_PASSWORD!!),
     }
   })
-  await CreateReptiles(prisma, 10);
+  // await CreateReptiles(prisma, 10);
 }
 
 main()

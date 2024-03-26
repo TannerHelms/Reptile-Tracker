@@ -14,20 +14,17 @@ const useLogin = () => {
     }, [user])
 
     const login = ({ email, password }) => {
-        console.log(email, password);
         return api.post("/sessions", { email, password })
     };
 
-    const mutate = {
+    const { mutateAsync: loginMutation, error } = useMutation({
         queryKey: ["user"],
         mutationFn: login,
         onSuccess: ({ user, token }) => {
             queryClient.setQueryData("user", user);
             dispatch(setToken({ token }))
         },
-    }
-
-    const { mutateAsync: loginMutation, error } = useMutation(mutate);
+    });
 
     return { login: loginMutation, error };
 }

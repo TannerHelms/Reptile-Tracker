@@ -5,7 +5,15 @@ const useReptile = () => {
     const api = useApi();
     const queryClient = useQueryClient();
     // { reptile, error }
-    const createReptile = (reptile) => api.post("/reptile", { ...reptile });
+    const create = (reptile) => api.post("/reptiles", { ...reptile });
+    const createReptile = useMutation({
+        mutationFn: create,
+        onSuccess: ({ reptile }) => {
+            queryClient.invalidateQueries(["reptiles"]);
+            queryClient.setQueryData(["reptile"], reptile);
+        }
+
+    })
 
     // { reptile, error }
     const getReptile = (id) => api.get(`/reptiles/${id}`);
@@ -22,7 +30,14 @@ const useReptile = () => {
     });
 
     // { error }
-    const deleteReptile = (id) => api.delete(`/reptile/${id}`);
+    const del = (id) => api.del(`/reptiles/${id}`);
+    const deleteReptile = useMutation({
+        mutationFn: del,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["reptiles"]);
+        }
+
+    })
 
     return { createReptile, getReptile, updateReptile, deleteReptile };
 };

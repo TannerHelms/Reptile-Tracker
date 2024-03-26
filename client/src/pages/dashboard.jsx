@@ -1,4 +1,16 @@
-import { Button, List, Modal, Table, ThemeIcon, rem } from "@mantine/core";
+import {
+  Anchor,
+  Button,
+  List,
+  Modal,
+  Select,
+  Space,
+  Table,
+  Text,
+  TextInput,
+  ThemeIcon,
+  rem,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCircleCheck } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -10,16 +22,63 @@ import useAuth from "../hooks/use_auth";
 import useReptiles from "../hooks/use_reptiles";
 import Schedule from "../mock/schedule";
 import { notifications } from "@mantine/notifications";
+import { modals } from "@mantine/modals";
+import useReptile from "../hooks/use_reptile";
+import CreateReptileModal from "../componets/create_reptile_modal";
 
 const Dashboard = () => {
   const { user, isLoading } = useAuth();
+  const { deleteReptile } = useReptile();
   const queryClient = useQueryClient();
   const [opened, { open, close }] = useDisclosure(false);
+  const [createModal, { open: openCreate, close: closeCreate }] =
+    useDisclosure(false);
+
   const [tasks, setTasks] = useState(Schedule);
   const { reptiles } = useReptiles();
   const [tab, setTab] = useState("Details");
   const completeTask = (id) => {
+    console.log(id);
     setTasks((prev) => prev.filter((task) => task.id !== id));
+  };
+  const handleDelete = (reptile) => {
+    modals.openConfirmModal({
+      title: "Delete your reptile",
+      centered: true,
+      children: (
+        <>
+          <Text size="sm">
+            Are you sure you want to delete your reptile? This action will
+            permanently delete your reptile and all of its data.
+          </Text>
+          <Space h="md" />
+          <Text size="lg">Reptile Name: {reptile.name}</Text>
+          <Text size="lg">Species: {reptile.species}</Text>
+          <Text size="lg">Sex: {reptile.sex}</Text>
+        </>
+      ),
+      labels: { confirm: "Delete reptile", cancel: "No don't delete it" },
+      confirmProps: { color: "red" },
+      onConfirm: () => {
+        const resp = deleteReptile.mutateAsync(reptile.id);
+        if (resp.error) {
+          notifications.show({
+            title: "Error",
+            message: "Failed to delete reptile",
+          });
+        } else {
+          notifications.show({
+            title: "Success",
+            message: "Successfully deleted reptile",
+          });
+        }
+      },
+    });
+  };
+
+  const handleCreateSchedule = () => {};
+  const handleCreateReptile = () => {
+    openCreate();
   };
 
   if (isLoading) return null;
@@ -29,6 +88,15 @@ const Dashboard = () => {
   }
   return (
     <>
+      <Modal
+        opened={createModal}
+        onClose={closeCreate}
+        centered
+        padding={0}
+        withCloseButton={false}
+      >
+        <CreateReptileModal close={closeCreate} />
+      </Modal>
       <Modal
         opened={opened}
         onClose={close}
@@ -40,7 +108,10 @@ const Dashboard = () => {
       </Modal>
 
       <div className="flex flex-col gap-4">
-        <p>Today's Schedule</p>
+        <div className="flex w-full justify-between align-middle">
+          <p>Today's Schedule</p>
+          <Anchor onClick={handleCreateSchedule}>Create</Anchor>
+        </div>
         <List
           size="sm"
           center
@@ -82,8 +153,10 @@ const Dashboard = () => {
             ))}
           </div>
         </List>
-
-        <p>Reptiles</p>
+        <div className="flex w-full justify-between items-center">
+          <p>Reptiles</p>
+          <Anchor onClick={handleCreateReptile}>Create</Anchor>
+        </div>
         <Table.ScrollContainer h={400}>
           <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
             <Table.Tbody>
@@ -96,6 +169,7 @@ const Dashboard = () => {
                     setTab(tab);
                     open();
                   }}
+                  deleteFn={handleDelete}
                 />
               ))}
             </Table.Tbody>
