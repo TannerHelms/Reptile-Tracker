@@ -1,9 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useApi from './use_api';
 
 const useReptile = () => {
     const api = useApi();
-
+    const queryClient = useQueryClient();
     // { reptile, error }
     const createReptile = (reptile) => api.post("/reptile", { ...reptile });
 
@@ -11,7 +11,15 @@ const useReptile = () => {
     const getReptile = (id) => api.get(`/reptiles/${id}`);
 
     // { updatedReptile, error }
-    const updateReptile = (reptile) => api.put(`/reptile/${reptile.id}`, { ...reptile });
+    const update = (reptile) => api.put(`/reptiles/${reptile.id}`, { ...reptile });
+
+    const updateReptile = useMutation({
+        mutationFn: update,
+        onSuccess: ({ updatedReptile }) => {
+            queryClient.invalidateQueries(["reptiles"]);
+            queryClient.setQueryData(["reptile"], updatedReptile);
+        }
+    });
 
     // { error }
     const deleteReptile = (id) => api.delete(`/reptile/${id}`);

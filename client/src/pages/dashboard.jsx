@@ -1,47 +1,32 @@
-import { Reptile_modal } from "./reptile_modal";
-import {
-  Button,
-  List,
-  Modal,
-  Select,
-  Table,
-  TextInput,
-  ThemeIcon,
-  rem,
-} from "@mantine/core";
+import { Button, List, Modal, Table, ThemeIcon, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCircleCheck } from "@tabler/icons-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import HeaderTabs from "../componets/header_tabs";
+import { ReptileModal } from "../componets/reptile_modal";
 import ReptileTile from "../componets/reptile_tile";
 import TaskTile from "../componets/task_tile";
 import useAuth from "../hooks/use_auth";
 import useReptiles from "../hooks/use_reptiles";
 import Schedule from "../mock/schedule";
-import useReptile from "../hooks/use_reptile";
+import { notifications } from "@mantine/notifications";
 
 const Dashboard = () => {
   const { user, isLoading } = useAuth();
+  const queryClient = useQueryClient();
   const [opened, { open, close }] = useDisclosure(false);
-  const [reptileFocus, setReptileFocus] = useState(null);
-  const [tab, setTab] = useState("Details");
-  const [updating, setUpdating] = useState(false);
   const [tasks, setTasks] = useState(Schedule);
   const { reptiles } = useReptiles();
-  const { updateReptile } = useReptile();
-
+  const [tab, setTab] = useState("Details");
   const completeTask = (id) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
-
-  const handleUpdateReptile = () => {};
 
   if (isLoading) return null;
 
   if (!user) {
     return null;
   }
-
   return (
     <>
       <Modal
@@ -51,27 +36,7 @@ const Dashboard = () => {
         padding={0}
         withCloseButton={false}
       >
-        <HeaderTabs
-          state={setTab}
-          reptile={reptileFocus}
-          close={close}
-          tab={tab}
-        />
-        <Reptile_modal
-          tab={tab}
-          reptileFocus={reptileFocus}
-          species={species}
-          slice={slice}
-          replace={replace}
-          sex={sex}
-          toLocaleUpperCase={toLocaleUpperCase}
-          createdAt={createdAt}
-          split={split}
-          updatedAt={updatedAt}
-          name={name}
-          updating={updating}
-          handleUpdateReptile={handleUpdateReptile}
-        />
+        <ReptileModal state={tab} close={close} />
       </Modal>
 
       <div className="flex flex-col gap-4">
@@ -127,7 +92,7 @@ const Dashboard = () => {
                   key={reptile.id}
                   reptile={reptile}
                   details={(reptile, tab) => {
-                    setReptileFocus(reptile);
+                    queryClient.setQueryData(["reptile"], reptile);
                     setTab(tab);
                     open();
                   }}
