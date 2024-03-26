@@ -13,6 +13,7 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import useLogin from "../hooks/use_login";
+import useCheckAuth from "../hooks/use_auth_check";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -28,6 +29,8 @@ const Login = () => {
     },
     validate: zodResolver(schema),
   });
+  const { isLoading } = useCheckAuth();
+  if (isLoading) return null;
 
   return (
     <Center className="w-screen h-screen background-gradient">

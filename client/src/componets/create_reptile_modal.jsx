@@ -4,13 +4,18 @@ import { modals } from "@mantine/modals";
 import { IoCloseSharp } from "react-icons/io5";
 import useReptile from "../hooks/use_reptile";
 import { notifications } from "@mantine/notifications";
+import { useState } from "react";
 
 const CreateReptileModal = ({ close }) => {
   const [reptile, setReptile] = useSetState(null);
   const { createReptile } = useReptile();
+  const [error, setError] = useState(null);
 
   const handleCreateReptile = async () => {
-    if (!reptile || !reptile.name || !reptile.species || !reptile.sex) return;
+    if (!reptile || !reptile.name || !reptile.species || !reptile.sex) {
+      setError("Please fill out all fields");
+      return;
+    }
     const resp = await createReptile.mutateAsync(reptile);
     if (resp.error) {
       notifications.show({
@@ -35,10 +40,16 @@ const CreateReptileModal = ({ close }) => {
         >
           <IoCloseSharp />
         </span>
+
         <Text size="lg" fw={500} ta={"center"}>
           Create Reptile
         </Text>
       </div>
+      {error && (
+        <p className="text-red-500 text-center">
+          Please fill in all the fields
+        </p>
+      )}
       <form className="flex flex-col gap-5 mt-2">
         <TextInput
           placeholder="Name"
