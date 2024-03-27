@@ -33,7 +33,7 @@ const App = () => {
         </div>
         <div className="fixed inset-x-0 -z-10">
           <Title order={1} ta="center">
-            {page.charAt(0).toUpperCase() + page.slice(1)}
+            {(page.charAt(0).toUpperCase() + page.slice(1)).replace("_", " ")}
           </Title>
         </div>
       </AppShell.Header>

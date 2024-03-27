@@ -25,11 +25,13 @@ import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
 import useReptile from "../hooks/use_reptile";
 import CreateReptileModal from "../componets/create_reptile_modal";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { user, isLoading } = useAuth();
   const { deleteReptile } = useReptile();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const [createModal, { open: openCreate, close: closeCreate }] =
     useDisclosure(false);
@@ -76,7 +78,9 @@ const Dashboard = () => {
     });
   };
 
-  const handleCreateSchedule = () => {};
+  const handleCreateSchedule = () => {
+    navigate("/create_schedule");
+  };
   const handleCreateReptile = () => {
     openCreate();
   };
