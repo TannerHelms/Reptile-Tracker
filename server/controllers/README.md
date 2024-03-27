@@ -213,7 +213,7 @@
 
 **Method:** ```GET```
 
-**Description:**  Retrieves reptiles and their schedules for the current day for a specific user. Returns an array of reptiles with their schedules the pertain to the day requested or an error.
+**Description:**  Retrieves reptiles and their schedules for the current day for a specific user. Returns an array of reptiles with their schedules (an array) that pertains to the day requested.
 
 **Body:**
 ```None```
@@ -221,16 +221,14 @@
 **Output:**
 ```json
 {
-  "reptilesWithSchedules": [
+  "reptilesWithSchedules": [ // list of reptiles that have schedules included
     {
       // normal reptile
-      "schedules": [ // the reptiles schedules
+      "schedules": [ // the reptiles schedules in a list
         {
           // normal schedule info
         }
       ]
-
-      // mulitple items of the format above
     }
   ],
   "error": "String (Error message if any)"
