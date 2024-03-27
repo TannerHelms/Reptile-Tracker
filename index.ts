@@ -13,12 +13,12 @@ import { buildHomeController } from "./server/controllers/home_controller";
 import { UsersRepository } from "./server/repositories/users_respository";
 import { buildReptilesController } from "./server/controllers/reptiles_controller";
 import { ReptileRepository } from "./server/repositories/reptiles_repository";
-// import { HusbandryRecordsController } from "./server/controllers/husbandry_records_controller";
 import { HusbandryRecordsRepository } from "./server/repositories/husbandry_records_repository";
 import { SchedulesRepository } from "./server/repositories/schedules_repository";
 import { buildSchedulesController } from "./server/controllers/schedules_controller";
 import { buildFeedingsController } from "./server/controllers/feeding_controller";
 import { FeedingRepository } from "./server/repositories/feeding_repository";
+import { buildUserReptilesAndSchedules } from "./server/controllers/reptile_schedule_controller";
 
 
 const db = new PrismaClient();
@@ -63,6 +63,7 @@ app.use("/reptiles", buildReptilesController(reptilesRepository, husbandryRecord
 app.use("/schedules", buildSchedulesController(schedulesRepository))
 app.use("/feeding", buildFeedingsController(feedingRepository))
 app.use("/sessions", buildSessionsController(db));
+app.use("/reptiles-schedules", buildUserReptilesAndSchedules(reptilesRepository, schedulesRepository))
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Listening on port ${process.env.PORT || 3000}...`);
