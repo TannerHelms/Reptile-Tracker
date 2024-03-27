@@ -20,7 +20,6 @@ const SignUp = () => {
         lastName,
       }),
     });
-    console.log(await res.json());
   }
 
   return (

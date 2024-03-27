@@ -1,19 +1,18 @@
 import { AppShell, Burger, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useSelector } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./componets/navbar";
-import useAuth from "./hooks/use_auth";
-import { useState } from "react";
-import { nullable } from "zod";
+import { nav } from "./store/navbar_slice";
+
+// todo: check if route is on a auth page or not
 
 const App = () => {
-  const { user, loading } = useAuth();
+  const navbar = useSelector(nav);
   const [opened, { toggle }] = useDisclosure();
   const page = useLocation().pathname.substring(1);
 
-  if (loading) return null;
-
-  if (!user) {
+  if (!navbar) {
     return <Outlet />;
   }
 

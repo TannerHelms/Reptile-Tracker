@@ -3,12 +3,12 @@ import {
   IconLogout,
   IconSpider,
 } from "@tabler/icons-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import classes from "../css/navbar.module.css";
 import useInit from "../hooks/use_init";
-import { logout } from "../store/auth_slice";
-import { useQueryClient } from "@tanstack/react-query";
+import useLogout from "../hooks/use_logout";
 
 const data = [
   { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
@@ -18,17 +18,16 @@ const data = [
 function Navbar({ close }) {
   const queryClient = useQueryClient();
   const location = useLocation();
+  const { logout } = useLogout();
   const [active, setActive] = useState(location.pathname);
 
   if (active === "/login") setActive("/dashboard");
 
-  const { navigate, dispatch } = useInit();
+  const { navigate } = useInit();
 
   const handleSignOut = async () => {
     close();
-    await dispatch(logout());
-    await navigate("/login");
-    queryClient.invalidateQueries("user");
+    logout();
   };
 
   const links = data.map((item) => (

@@ -17,6 +17,8 @@ import { ReptileRepository } from "./server/repositories/reptiles_repository";
 import { HusbandryRecordsRepository } from "./server/repositories/husbandry_records_repository";
 import { SchedulesRepository } from "./server/repositories/schedules_repository";
 import { buildSchedulesController } from "./server/controllers/schedules_controller";
+import { buildFeedingsController } from "./server/controllers/feeding_controller";
+import { FeedingRepository } from "./server/repositories/feeding_repository";
 
 
 const db = new PrismaClient();
@@ -24,6 +26,8 @@ const usersRepository = UsersRepository.getInstance(db);
 const reptilesRepository = ReptileRepository.getInstance(db);
 const husbandryRecordsRepository = HusbandryRecordsRepository.getInstance(db);
 const schedulesRepository = new SchedulesRepository(db);
+const feedingRepository = FeedingRepository.getInstance(db);
+
 dotenv.config();
 
 export const DEBUG = process.env.NODE_ENV !== "production";
@@ -57,6 +61,7 @@ app.use("/", buildHomeController());
 app.use("/users", buildUsersController(usersRepository));
 app.use("/reptiles", buildReptilesController(reptilesRepository, husbandryRecordsRepository))
 app.use("/schedules", buildSchedulesController(schedulesRepository))
+app.use("/feeding", buildFeedingsController(feedingRepository))
 app.use("/sessions", buildSessionsController(db));
 
 app.listen(process.env.PORT || 3000, () => {

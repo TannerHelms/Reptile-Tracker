@@ -12,7 +12,8 @@
     "migrate-reset": "prisma migrate reset",
     "seed": "prisma db seed",
     "console": "prisma-repl",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "reset": "prisma migrate reset --skip-seed"
   },
   "license": "MIT",
   "devDependencies": {
@@ -28,7 +29,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@mantine/notifications": "^7.6.2",
+    "@faker-js/faker": "^8.4.1",
     "@prisma/client": "^5.9.1",
     "add": "^2.0.6",
     "bcryptjs": "^2.4.3",

@@ -1,39 +1,44 @@
 import { createContext } from "react";
+import axios from "axios";
 import { store } from "../store/store";
 
 export class Api {
-
-  static async makeRequest(uri, method, body) {
-    const token = store.getState().auth.token;
+  async makeRequest(uri, method, body) {
+    const token = store.getState().token.value;
     const options = {
       method,
       headers: {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json"
       },
-    }
+    };
 
     if (body) {
-      options.body = JSON.stringify(body);
+      options.data = body;
     }
-    const res = await fetch(uri, options);
-    return res.json();
+
+    try {
+      const res = await axios(uri, options);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
   }
 
-  static get(uri) {
-    return this.makeRequest(uri, "get")
+  get(uri) {
+    return this.makeRequest(uri, "get");
   }
 
-  static post(uri, body) {
-    return this.makeRequest(uri, "post", body)
+  post(uri, body) {
+    return this.makeRequest(uri, "post", body);
   }
 
-  static put(uri, body) {
-    return this.makeRequest(uri, "put", body)
+  put(uri, body) {
+    return this.makeRequest(uri, "put", body);
   }
 
-  static del(uri) {
-    return this.makeRequest(uri, "del")
+  del(uri) {
+    return this.makeRequest(uri, "delete");
   }
 }
 

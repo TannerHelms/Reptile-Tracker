@@ -16,12 +16,16 @@ import Reptile from "./pages/reptile.jsx";
 import { persistor, store } from "./store/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 import Login from "./pages/login.jsx";
+import "@mantine/notifications/styles.css";
 import {
   QueryCache,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Notifications } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
+
 const router = createHashRouter([
   {
     path: "",
@@ -56,6 +60,8 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 1000 * 60 * 10, // 10 minutes
       cacheTime: 1000 * 60 * 15, // 15 minutes
+      useErrorBoundary: true,
+      retry: 0,
     },
   },
 });
@@ -67,11 +73,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <PersistGate loading={null} persistor={persistor}>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={appTheme}>
-          <ApiContext.Provider value={new Api()}>
-            <UserProvider>
-              <RouterProvider router={router} />
-            </UserProvider>
-          </ApiContext.Provider>
+          <Notifications />
+          <ModalsProvider>
+            <ApiContext.Provider value={new Api()}>
+              <UserProvider>
+                <RouterProvider router={router} />
+              </UserProvider>
+            </ApiContext.Provider>
+          </ModalsProvider>
         </MantineProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

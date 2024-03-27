@@ -9,29 +9,32 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
 
   // Create a new reptile
   router.post("/", authMiddleware, async (req, res) => {
+
     if (!req.user) {
-    return res.status(401).json({ error: "User not authenticated" });
+      return res.status(401).json({ error: "User not authenticated" });
     }
     const { species, name, sex } = req.body; // Destructure species, name, and sex from the request body
+    const speciesFormatted = species.replace(" ", "_"); // Replace spaces with underscores
+    console.log(speciesFormatted)
     const userId = req.user.id; // Extract userId from req.user
     try {
-    const reptile = await reptileRepository.createReptile({
+      const reptile = await reptileRepository.createReptile({
         userId: userId,
-        species: species,
+        species: speciesFormatted,
         name: name,
         sex: sex
-    });
-    res.status(200).json({ reptile });
+      });
+      res.status(200).json({ reptile });
     } catch (error) {
-    res.status(500).json({ error: "Error creating reptile" });
+      console.error("Error creating reptile:", error);
+      res.status(500).json({ error: "Error creating reptile" });
     }
   });
-  
 
   // Get all reptiles of the authenticated user
   router.get("/", authMiddleware, async (req, res) => {
     if (!req.user) {
-        return res.status(401).json({ error: "User not authenticated" });
+      return res.status(401).json({ error: "User not authenticated" });
     }
     const userId = req.user.id; // Extract userId from JWT payload
     const reptiles = await reptileRepository.getUsersReptiles(userId); // Assuming getReptilesByUserId method exists in your repository
@@ -45,7 +48,7 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     }
     const userId = req.user.id; // Extract userId from JWT payload
     const reptileId = Number(req.params.reptileId); // Extract reptileId from URL parameters
-  
+
     try {
       const reptile = await reptileRepository.getReptileById(reptileId);
       // Check if the reptile exists
@@ -62,7 +65,6 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
       res.status(500).json({ error: "Internal server error" });
     }
   });
-  
 
   // Update a specific reptile by ID
   router.put("/:reptileId", authMiddleware, async (req, res) => {
@@ -83,17 +85,15 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     }
   });
 
-  
-  
   // Delete a specific reptile by ID
   router.delete("/:reptileId", authMiddleware, async (req, res) => {
     if (!req.user) {
       return res.status(401).json({ error: "User not authenticated" });
     }
-  
+
     const userId = req.user.id; // Extract userId from JWT payload
     const reptileId = Number(req.params.reptileId); // Extract reptileId from URL parameters
-  
+
     try {
       await reptileRepository.deleteReptile(reptileId, userId);
       res.status(204).send(); // No content
@@ -138,5 +138,3 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
 
   return router;
 };
-
-

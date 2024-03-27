@@ -2,16 +2,18 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { getPersistConfig } from 'redux-deep-persist';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import authReducer from './auth_slice';
-
+import navbarReducer from './navbar_slice';
+import tokenReducer from './token_slice';
 const rootReducer = combineReducers({
-    auth: authReducer,
+
+    navbar: navbarReducer,
+    token: tokenReducer,
 })
 
 const persistConfig = getPersistConfig({
     key: 'root',
-    storage,
-    whitelist: ['auth.token'],
+storage,
+    whitelist: ['token'],
     rootReducer,
 });
 

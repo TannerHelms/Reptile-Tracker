@@ -11,13 +11,9 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useEffect, useState } from "react";
 import { z } from "zod";
-import useAuth from "../hooks/use_auth";
-import { login } from "../store/auth_slice";
-import useInit from "../hooks/use_init";
-import { useQueryClient } from "@tanstack/react-query";
-import useSignIn from "../hooks/use_signin";
+import useLogin from "../hooks/use_login";
+import useCheckAuth from "../hooks/use_auth_check";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -25,10 +21,7 @@ const schema = z.object({
 });
 
 const Login = () => {
-  const { SignInMutation, error } = useSignIn();
-  const queryClient = useQueryClient();
-  const { user } = useAuth();
-  const { navigate, dispatch, api } = useInit();
+  const { login, error } = useLogin();
   const form = useForm({
     initialValues: {
       email: "",
@@ -36,27 +29,12 @@ const Login = () => {
     },
     validate: zodResolver(schema),
   });
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user]);
-
-  async function handleLogin({ email, password }) {
-    await SignInMutation({ email, password });
-  }
-
-  if (user) {
-    return null;
-  }
+  const { isLoading } = useCheckAuth();
+  if (isLoading) return null;
 
   return (
     <Center className="w-screen h-screen background-gradient">
-      <form
-        onSubmit={form.onSubmit((values) => handleLogin(values))}
-        className="w-600"
-      >
+      <form onSubmit={form.onSubmit(login)} className="w-600">
         <Title ta="center" className="font-black">
           Reptile Tracker!
         </Title>
