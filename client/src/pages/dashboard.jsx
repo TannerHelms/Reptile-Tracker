@@ -38,6 +38,7 @@ const Dashboard = () => {
 
   const [tasks, setTasks] = useState(Schedule);
   const { reptiles } = useReptiles();
+  console.log(reptiles);
   const [tab, setTab] = useState("Details");
   const completeTask = (id) => {
     console.log(id);

@@ -1,4 +1,5 @@
 import {
+  IconCalendar,
   IconLayoutDashboard,
   IconLogout,
   IconSpider,
@@ -13,6 +14,7 @@ import useLogout from "../hooks/use_logout";
 const data = [
   { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
   { link: "/reptiles", label: "Reptiles", icon: IconSpider },
+  { link: "/create_schedule", label: "Schedule", icon: IconCalendar },
 ];
 
 function Navbar({ close }) {
@@ -20,8 +22,6 @@ function Navbar({ close }) {
   const location = useLocation();
   const { logout } = useLogout();
   const [active, setActive] = useState(location.pathname);
-
-  if (active === "/login") setActive("/dashboard");
 
   const { navigate } = useInit();
 

@@ -30,7 +30,6 @@ const CreateSchedule = () => {
     saturday: false,
     sunday: false,
   });
-  console.log(schedule);
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
   const prevStep = () =>
@@ -47,8 +46,8 @@ const CreateSchedule = () => {
         >
           <Stepper.Step label="First step" description="Select a reptile">
             Step 1 content: Select a reptile
-            <p>value: {schedule.reptileId}</p>
             <Select
+              key={1}
               value={schedule.reptileId}
               placeholder="Select Reptile"
               data={reptiles.map((reptile) => ({
@@ -63,8 +62,8 @@ const CreateSchedule = () => {
             description="Choose type of Schedule"
           >
             Step 2 content: Choose type of Scheule and a descriptions
-            <p>value: {schedule.type}</p>
             <Select
+              key={2}
               defaultValue=""
               value={schedule.type}
               placeholder="Select Schedule Type"
@@ -150,10 +149,23 @@ const CreateSchedule = () => {
         </Stepper>
 
         <Group justify="center" mt="xl">
-          <Button variant="default" onClick={prevStep}>
-            Back
-          </Button>
-          <Button onClick={nextStep}>Next step</Button>
+          {active < 3 && (
+            <>
+              <Button variant="default" onClick={prevStep}>
+                Back
+              </Button>
+              <Button onClick={nextStep}>Next step</Button>
+            </>
+          )}
+          {active === 3 && (
+            <Button
+              onClick={() => {
+                console.log(schedule);
+              }}
+            >
+              Create Schedule
+            </Button>
+          )}
         </Group>
       </div>
     </>
