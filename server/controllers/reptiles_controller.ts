@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { authMiddleware } from "../middleware/authentication";
 import { ReptileRepository } from "../repositories/reptiles_repository"; // Assuming you have a repository for reptiles
+import { HusbandryRecordsRepository } from "../repositories/husbandry_records_repository";
 
 // /reptiles/...
-export const buildReptilesController = (reptileRepository: ReptileRepository) => {
+export const buildReptilesController = (reptileRepository: ReptileRepository, husbandry_records_repository: HusbandryRecordsRepository) => {
   const router = Router();
 
   // Create a new reptile
@@ -108,30 +109,28 @@ export const buildReptilesController = (reptileRepository: ReptileRepository) =>
     }
     const { length, weight, temperature, humidity } = req.body;
     const reptileId = Number(req.params.reptileId);
+    const userId = req.user.id; // Assume you have the userId from the authenticated user
 
     try {
-      const husbandryRecord = await reptileRepository.addHusbandryRecord({
-        reptileId,
-        length,
-        weight,
-        temperature,
-        humidity,
-      });
+      // Use the instance to call the method
+      const husbandryRecord = await husbandry_records_repository.createHusbandryRecord(userId, reptileId, length, weight, temperature, humidity);
       res.status(200).json({ husbandryRecord });
     } catch (error) {
       res.status(500).json({ error: "Error adding husbandry record" });
     }
   });
 
-  // Get all husbandry records for a reptile
+  // Adjusted route for getting all husbandry records for a reptile
   router.get("/:reptileId/husbandry", authMiddleware, async (req, res) => {
     if (!req.user) {
       return res.status(401).json({ error: "User not authenticated" });
     }
     const reptileId = Number(req.params.reptileId);
+    const userId = req.user.id; // Assume you have the userId from the authenticated user
 
     try {
-      const husbandryRecords = await reptileRepository.getHusbandryRecords(reptileId);
+      // Use the instance to call the method
+      const husbandryRecords = await husbandry_records_repository.getHusbandryRecordsByReptile(userId, reptileId);
       res.status(200).json({ husbandryRecords });
     } catch (error) {
       res.status(500).json({ error: "Error retrieving husbandry records" });

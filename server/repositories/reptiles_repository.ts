@@ -97,24 +97,34 @@ export class ReptileRepository {
       }
     });
   }
-
-  async addHusbandryRecord({ reptileId, length, weight, temperature, humidity }): Promise<any> {
-    return this.db.husbandryRecord.create({
-      data: {
-        reptileId,
-        length,
-        weight,
-        temperature,
-        humidity,
-      },
-    });
-  }
-
-  async getHusbandryRecords(reptileId: number): Promise<any[]> {
-    return this.db.husbandryRecord.findMany({
-      where: {
-        reptileId,
-      },
-    });
-  }
 }
+
+  // interface AddHusbandryRecordParams {
+  //   reptileID: number;
+  //   length: number;
+  //   weight: number;
+  //   temperature: number;
+  //   humidity: number;
+  // }
+  
+
+//   async addHusbandryRecord({ reptileId, length, weight, temperature, humidity }: AddHusbandryRecordParams): Promise<any> {
+//     return this.db.husbandryRecord.create({
+//       data: {
+//         reptileId,
+//         length,
+//         weight,
+//         temperature,
+//         humidity,
+//       },
+//     });
+//   }
+
+//   async getHusbandryRecords(reptileId: number): Promise<any[]> {
+//     return this.db.husbandryRecord.findMany({
+//       where: {
+//         reptileId,
+//       },
+//     });
+//   }
+// }
