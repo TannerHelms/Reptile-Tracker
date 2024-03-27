@@ -207,22 +207,31 @@
 ```
 
 
+## Reptile Schedule Controller
+### Getting Reptiles and Their Schedules for the Current Day
+**Endpoint:** ```/reptiles-schedules```
 
-### 
-**Endpoint:** ```/feedings/```
+**Method:** ```GET```
 
-**Method:** ``` ```
-
-**Description:** 
+**Description:**  Retrieves reptiles and their schedules for the current day for a specific user. Returns an array of reptiles with their schedules (an array) that pertains to the day requested.
 
 **Body:**
-```json
-{
-}
-```
+```None```
 
 **Output:**
 ```json
 {
+  "reptilesWithSchedules": [ // list of reptiles that have schedules included
+    {
+      // normal reptile
+      "schedules": [ // the reptiles schedules in a list
+        {
+          // normal schedule info
+        }
+      ]
+    }
+  ],
+  "error": "String (Error message if any)"
 }
+
 ```
