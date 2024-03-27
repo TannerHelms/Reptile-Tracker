@@ -110,12 +110,11 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     const { length, weight, temperature, humidity } = req.body;
     const reptileId = Number(req.params.reptileId);
     const userId = req.user.id; // Assume you have the userId from the authenticated user
-
     try {
-      // Use the instance to call the method
       const husbandryRecord = await husbandry_records_repository.createHusbandryRecord(userId, reptileId, length, weight, temperature, humidity);
       res.status(200).json({ husbandryRecord });
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: "Error adding husbandry record" });
     }
   });

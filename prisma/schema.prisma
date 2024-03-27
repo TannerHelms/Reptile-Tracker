@@ -50,7 +50,7 @@ model Reptile {
 
 model Feeding {
   id        Int       @id @default(autoincrement())
-  reptileID Int
+  reptileId Int
   foodItem  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -58,7 +58,7 @@ model Feeding {
 
 model HusbandryRecord {
   id          Int       @id @default(autoincrement())
-  reptileID   Int
+  reptileId   Int
   length      Float
   weight      Float
   temperature Float

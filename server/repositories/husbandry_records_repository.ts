@@ -15,10 +15,10 @@ export class HusbandryRecordsRepository {
         return this.instance;
     }
 
-    public async createHusbandryRecord(userId: number, reptileID: number, length: number, weight: number, temperature: number, humidity: number) {
+    public async createHusbandryRecord(userId: number, reptileId: number, length: number, weight: number, temperature: number, humidity: number) {
         return this.db.husbandryRecord.create({
             data: {
-                reptileID,
+                reptileId,
                 length,
                 weight,
                 temperature,
@@ -27,10 +27,10 @@ export class HusbandryRecordsRepository {
         });
     }
 
-    public async getHusbandryRecordsByReptile(userId: number, reptileID: number) {
+    public async getHusbandryRecordsByReptile(userId: number, reptileId: number) {
         return this.db.husbandryRecord.findMany({
             where: {
-                reptileID
+                reptileId
             }
         });
     }
