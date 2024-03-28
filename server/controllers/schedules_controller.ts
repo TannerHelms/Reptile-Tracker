@@ -13,12 +13,12 @@ export const buildSchedulesController = (schedulesRepository: SchedulesRepositor
     try {
       const userId = req.user.id
       const reptileId = Number(req.params.reptileId);
-      const { type, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday} = req.body;
+      const { type, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = req.body;
       const schedule = await schedulesRepository.createSchedule(
         {
-          userId, 
+          userId,
           reptileId,
-          type, 
+          type,
           description,
           monday,
           tuesday,
@@ -41,6 +41,7 @@ export const buildSchedulesController = (schedulesRepository: SchedulesRepositor
       return res.status(401).json({ error: "User not authenticated" });
     }
     const reptileId = Number(req.params.reptileId);
+
     try {
       const schedules = await schedulesRepository.getSchedulesByReptile(req.user.id, reptileId);
       res.status(200).json({ schedules });
@@ -58,7 +59,7 @@ export const buildSchedulesController = (schedulesRepository: SchedulesRepositor
     const userId = req.user.id
     const scheduleId = Number(req.params.scheduleId);
     try {
-      const { reptileId, type, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday} = req.body;
+      const { reptileId, type, description, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = req.body;
       const updatedSchedule = await schedulesRepository.updateSchedule(
         scheduleId,
         {

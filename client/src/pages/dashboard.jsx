@@ -3,29 +3,27 @@ import {
   Button,
   List,
   Modal,
-  Select,
   Space,
   Table,
   Text,
-  TextInput,
   ThemeIcon,
   rem,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 import { IconCircleCheck } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CreateReptileModal from "../componets/create_reptile_modal";
 import { ReptileModal } from "../componets/reptile_modal";
 import ReptileTile from "../componets/reptile_tile";
 import TaskTile from "../componets/task_tile";
 import useAuth from "../hooks/use_auth";
-import useReptiles from "../hooks/use_reptiles";
-import Schedule from "../mock/schedule";
-import { notifications } from "@mantine/notifications";
-import { modals } from "@mantine/modals";
 import useReptile from "../hooks/use_reptile";
-import CreateReptileModal from "../componets/create_reptile_modal";
-import { useNavigate } from "react-router-dom";
+import useReptiles from "../hooks/use_reptiles";
+import useSchedules from "../hooks/use_schedules";
 
 const Dashboard = () => {
   const { user, isLoading } = useAuth();
@@ -36,14 +34,10 @@ const Dashboard = () => {
   const [createModal, { open: openCreate, close: closeCreate }] =
     useDisclosure(false);
 
-  const [tasks, setTasks] = useState(Schedule);
   const { reptiles } = useReptiles();
-  console.log(reptiles);
+  const { schedules } = useSchedules();
   const [tab, setTab] = useState("Details");
-  const completeTask = (id) => {
-    console.log(id);
-    setTasks((prev) => prev.filter((task) => task.id !== id));
-  };
+
   const handleDelete = (reptile) => {
     modals.openConfirmModal({
       title: "Delete your reptile",
@@ -84,6 +78,11 @@ const Dashboard = () => {
   };
   const handleCreateReptile = () => {
     openCreate();
+  };
+
+  const handleViewReptile = (reptile) => {
+    queryClient.setQueryData(["reptile"], reptile);
+    navigate("/reptiles");
   };
 
   if (isLoading) return null;
@@ -127,35 +126,39 @@ const Dashboard = () => {
           }
         >
           <div className="flex gap-5 overflow-x-auto p-3">
-            {tasks.map((task, idx) => (
-              <div
-                className="flex flex-col gap-4 items-center w-60 p-3 rounded-lg shadow-md"
-                key={idx}
-                style={{ backgroundColor: "#EEF2F3" }}
-              >
-                <div className="flex flex-col gap-3 w-full overflow-x-auto">
-                  <p className="text-center">{task.reptile.name}</p>
-                  <div className="w-full flex flex-row justify-between px-3">
-                    <p>Species</p>
-                    <p>{task.reptile.species.slice(0).replace("_", " ")}</p>
+            {schedules?.map((reptile, idx) => {
+              if (reptile.schedules.length == 0) return null;
+              return (
+                <div
+                  className="flex flex-col gap-4 items-center p-3 rounded-lg shadow-md color-secondary"
+                  key={idx}
+                >
+                  <div className="flex flex-col gap-3 overflow-x-auto w-52">
+                    <p className="text-center">{reptile.name}</p>
+                    <div className="w-full flex flex-row justify-between px-3">
+                      <p>Species</p>
+                      <p>{reptile.species.slice(0).replace("_", " ")}</p>
+                    </div>
+                    <div className="w-full flex flex-row justify-between px-3">
+                      <p>Sex</p>
+                      <p>{reptile.sex.toLocaleUpperCase()}</p>
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row justify-between px-3">
-                    <p>Sex</p>
-                    <p>{task.reptile.sex.toLocaleUpperCase()}</p>
+                  <div className="flex justify-center">
+                    {reptile.schedules.map((schedule) => (
+                      <TaskTile key={schedule.id} task={schedule}></TaskTile>
+                    ))}
                   </div>
+                  <Button
+                    fullWidth
+                    data-reptile={reptile}
+                    onClick={() => handleViewReptile(reptile)}
+                  >
+                    View
+                  </Button>
                 </div>
-                <div className="flex justify-center">
-                  {task.schedules.map((schedule) => (
-                    <TaskTile
-                      key={schedule.id}
-                      click={completeTask}
-                      task={schedule}
-                    ></TaskTile>
-                  ))}
-                </div>
-                <Button fullWidth>View</Button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </List>
         <div className="flex w-full justify-between items-center">

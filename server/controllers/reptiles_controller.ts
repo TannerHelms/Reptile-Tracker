@@ -20,7 +20,7 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     try {
       const reptile = await reptileRepository.createReptile({
         userId: userId,
-        species: speciesFormatted,
+      species: speciesFormatted,
         name: name,
         sex: sex
       });
@@ -102,7 +102,7 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
       res.status(500).json({ error: "Internal server error" });
     }
   });
-  
+
   router.post("/:reptileId/husbandry", authMiddleware, async (req, res) => {
     if (!req.user) {
       return res.status(401).json({ error: "User not authenticated" });

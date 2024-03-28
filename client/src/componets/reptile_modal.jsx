@@ -46,6 +46,11 @@ export function ReptileModal({ state, close }) {
     setTab(value.currentTarget.dataset.id);
   };
 
+  const handleClose = () => {
+    queryClient.setQueryData(["reptile"], null);
+    close();
+  };
+
   if (!reptile) return null;
 
   return (
@@ -55,7 +60,7 @@ export function ReptileModal({ state, close }) {
           <Text fz="xl" fw={500} className="text-center ">
             {reptile.name}
           </Text>
-          <p className="absolute right-4 cursor-pointer" onClick={close}>
+          <p className="absolute right-4 cursor-pointer" onClick={handleClose}>
             <IoCloseSharp />
           </p>
         </div>

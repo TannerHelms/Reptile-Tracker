@@ -4,7 +4,7 @@ import useApi from "./use_api";
 const useReptiles = () => {
     const api = useApi();
 
-    const getReptiles = () => api.get("/reptiles-schedules");
+    const getReptiles = () => api.get("/reptiles");
 
     const query = {
         queryKey: ["reptiles"],
