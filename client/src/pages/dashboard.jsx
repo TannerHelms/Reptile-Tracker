@@ -1,6 +1,5 @@
 import {
   Anchor,
-  Button,
   List,
   Modal,
   Space,
@@ -19,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import CreateReptileModal from "../componets/create_reptile_modal";
 import { ReptileModal } from "../componets/reptile_modal";
 import ReptileTile from "../componets/reptile_tile";
-import TaskTile from "../componets/task_tile";
+import ScheduleTile from "../componets/schedule_tile";
 import useAuth from "../hooks/use_auth";
 import useReptile from "../hooks/use_reptile";
 import useReptiles from "../hooks/use_reptiles";
@@ -129,34 +128,12 @@ const Dashboard = () => {
             {schedules?.map((reptile, idx) => {
               if (reptile.schedules.length == 0) return null;
               return (
-                <div
-                  className="flex flex-col gap-4 items-center p-3 rounded-lg shadow-md color-secondary"
+                <ScheduleTile
                   key={idx}
-                >
-                  <div className="flex flex-col gap-3 overflow-x-auto w-52">
-                    <p className="text-center">{reptile.name}</p>
-                    <div className="w-full flex flex-row justify-between px-3">
-                      <p>Species</p>
-                      <p>{reptile.species.slice(0).replace("_", " ")}</p>
-                    </div>
-                    <div className="w-full flex flex-row justify-between px-3">
-                      <p>Sex</p>
-                      <p>{reptile.sex.toLocaleUpperCase()}</p>
-                    </div>
-                  </div>
-                  <div className="flex justify-center">
-                    {reptile.schedules.map((schedule) => (
-                      <TaskTile key={schedule.id} task={schedule}></TaskTile>
-                    ))}
-                  </div>
-                  <Button
-                    fullWidth
-                    data-reptile={reptile}
-                    onClick={() => handleViewReptile(reptile)}
-                  >
-                    View
-                  </Button>
-                </div>
+                  idx={idx}
+                  reptile={reptile}
+                  handleViewReptile={handleViewReptile}
+                />
               );
             })}
           </div>

@@ -17,6 +17,8 @@ const useSchedules = () => {
         return reptile;
     };
 
+    const create = (schedule) => api.post(`/schedules/${schedule.reptileId}`, { ...schedule });
+
     const query = {
         queryKey: ["schedules"],
         queryFn: getSchedules,
@@ -34,9 +36,16 @@ const useSchedules = () => {
         }
     })
 
+    const { mutateAsync: createSchedule, error: createError } = useMutation({
+        mutationFn: create,
+        onSuccess: async () => {
+            queryClient.invalidateQueries(["schedules", "reptiles"])
+        }
+    })
+
     // { reptiles, error }
     const { data: schedules, error, isLoading } = useQuery(query);
 
-    return { schedules: schedules?.reptilesWithSchedules, error, isLoading, updateSchedule, deleteSchedule }
+    return { schedules: schedules?.reptilesWithSchedules, error, isLoading, updateSchedule, deleteSchedule, createSchedule, createError }
 }
 export default useSchedules;

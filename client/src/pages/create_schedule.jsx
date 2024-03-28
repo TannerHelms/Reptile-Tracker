@@ -12,11 +12,16 @@ import { useState } from "react";
 import DayTile from "../componets/day_tile";
 import useAuth from "../hooks/use_auth";
 import useReptiles from "../hooks/use_reptiles";
+import useSchedules from "../hooks/use_schedules";
+import { notifications } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
 
 const CreateSchedule = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const { reptiles, error, isLoading } = useReptiles();
+  const { createSchedule, createError } = useSchedules();
   const [schedule, setSchedule] = useSetState({
     userId: user?.id,
     reptileId: "",
@@ -34,6 +39,19 @@ const CreateSchedule = () => {
     setActive((current) => (current < 3 ? current + 1 : current));
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
+
+  const handleCreateSchedule = async () => {
+    await createSchedule(schedule);
+    if (createError) {
+      console.log(createError);
+    } else {
+      notifications.show({
+        title: "Success",
+        message: "Successfully created the schedule",
+      });
+      navigate("/dashboard");
+    }
+  };
 
   if (isLoading) return null;
 
@@ -69,10 +87,12 @@ const CreateSchedule = () => {
               placeholder="Select Schedule Type"
               data={["feed", "clean", "record"]}
               onChange={(value) => setSchedule({ type: value })}
+              className="m-3"
             />
             <TextInput
               label="Schedule Description"
               onChange={(e) => setSchedule({ description: e.target.value })}
+              className="m-3"
             />
           </Stepper.Step>
           <Stepper.Step label="Final step" description="Setup Scheule">
@@ -158,13 +178,7 @@ const CreateSchedule = () => {
             </>
           )}
           {active === 3 && (
-            <Button
-              onClick={() => {
-                console.log(schedule);
-              }}
-            >
-              Create Schedule
-            </Button>
+            <Button onClick={handleCreateSchedule}>Create Schedule</Button>
           )}
         </Group>
       </div>
