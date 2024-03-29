@@ -33,7 +33,7 @@ const Dashboard = () => {
   const [createModal, { open: openCreate, close: closeCreate }] =
     useDisclosure(false);
 
-  const { reptiles } = useReptiles();
+  const reptiles = useReptiles();
   const { schedules } = useSchedules();
   const [tab, setTab] = useState("Details");
 
@@ -147,7 +147,7 @@ const Dashboard = () => {
         <Table.ScrollContainer h={400}>
           <Table verticalSpacing="md" striped highlightOnHover withTableBorder>
             <Table.Tbody>
-              {reptiles?.map((reptile) => (
+              {reptiles?.data?.map((reptile) => (
                 <ReptileTile
                   key={reptile.id}
                   reptile={reptile}

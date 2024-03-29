@@ -12,7 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import classes from "../css/header_tabs.module.css";
-import useReptiles from "../hooks/use_reptiles";
+import useReptile from "../hooks/use_reptile";
 
 const tabs = ["Details", "Edit"];
 
@@ -20,11 +20,11 @@ export function ReptileModal({ state, close }) {
   const queryClient = useQueryClient();
   const reptile = queryClient.getQueryData(["reptile"]);
   const [newReptile, setNewReptile] = useSetState({ ...reptile });
-  const { updateReptile } = useReptiles();
+  const { updateReptile } = useReptile();
   const [tab, setTab] = useState(state);
 
   const handleUpdateReptile = async () => {
-    const resp = await updateReptile({ reptile: newReptile });
+    const resp = await updateReptile.mutateAsync(newReptile);
     if (resp.updatedReptile) {
       notifications.show({
         title: "Success",

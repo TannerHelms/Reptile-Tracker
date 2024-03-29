@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import useApi from './use_api';
-import { boolean } from 'zod';
 import { useSelector } from 'react-redux';
 import { token as tokenFn } from '../store/token_slice';
+import useApi from './use_api';
 
 const useReptile = (id) => {
     const api = useApi();
@@ -10,7 +9,10 @@ const useReptile = (id) => {
     const token = useSelector(tokenFn)
 
     // CRUD Functionality for a reptile
-    const get = () => api.get(`/reptiles/${id}`)
+    const get = async () => {
+        const { reptile } = await api.get(`/reptiles/${id}`)
+        return reptile
+    }
 
     const update = (reptile) => api.put(`/reptiles/${reptile.id || id}`, reptile)
 
@@ -18,7 +20,7 @@ const useReptile = (id) => {
 
 
     // Get a reptile
-    const { data: reptile, isLoading, error, status } = useQuery({
+    const reptile = useQuery({
         queryKey: ["reptile", parseInt(id)],
         queryFn: get,
         enabled: id != "null" && id != undefined && token.value != null,
@@ -28,10 +30,14 @@ const useReptile = (id) => {
     const updateReptile = useMutation({
         mutationFn: update,
         onMutate: (reptile) => {
+            console.log(reptile)
             queryClient.setQueryData(["reptile", reptile.id], { reptile })
+            queryClient.setQueryData(["reptiles"], ({ reptiles: old }) => {
+                return old.map((r) => r.id == reptile.id ? reptile : r)
+            })
         },
         onSettled: () => {
-            queryClient.invalidateQueries(["reptile", id])
+            // queryClient.invalidateQueries(["reptile", id])
         },
     })
 
@@ -44,7 +50,7 @@ const useReptile = (id) => {
         },
     });
 
-    return { reptile: reptile?.reptile, isLoading, error, updateReptile, status, deleteReptile };
+    return { reptile, updateReptile, deleteReptile };
 
 };
 
