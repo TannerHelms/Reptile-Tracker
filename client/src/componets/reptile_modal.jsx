@@ -26,6 +26,7 @@ export function ReptileModal({ state, close }) {
   const handleUpdateReptile = async () => {
     const resp = await updateReptile.mutateAsync(newReptile);
     if (resp.updatedReptile) {
+      close();
       notifications.show({
         title: "Success",
         message: "Successfully updated reptile",

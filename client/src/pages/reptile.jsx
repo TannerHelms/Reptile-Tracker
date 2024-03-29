@@ -33,7 +33,7 @@ const Reptile = () => {
       confirm: "Delete Schedule",
       cancel: "No don't delete it",
       onConfirm: async () => {
-        await deleteSchedule({ reptileId: reptile.id, id });
+        await deleteSchedule({ reptileId: reptile?.data?.id, id });
         notifications.show({
           title: "Success",
           message: "Successfully deleted the schedule",

@@ -20,7 +20,7 @@ const CreateSchedule = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
-  const { reptiles, error, isLoading } = useReptiles();
+  const reptiles = useReptiles();
   const { createSchedule, createError } = useSchedules();
   const [schedule, setSchedule] = useSetState({
     userId: user?.id,
@@ -53,7 +53,7 @@ const CreateSchedule = () => {
     }
   };
 
-  if (isLoading) return null;
+  if (reptiles?.isLoading) return null;
 
   return (
     <>
@@ -68,7 +68,7 @@ const CreateSchedule = () => {
               key={1}
               value={schedule.reptileId}
               placeholder="Select Reptile"
-              data={reptiles.map((reptile) => ({
+              data={reptiles?.data?.map((reptile) => ({
                 label: reptile.name,
                 value: `${reptile.id}`,
               }))}

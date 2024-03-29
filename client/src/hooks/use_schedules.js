@@ -14,17 +14,9 @@ const useSchedules = () => {
     const del = async ({ reptileId, id }) => api.del(`schedules/schedule/${id}`)
 
     const { mutateAsync: deleteSchedule, variables } = useMutation({
-        onMutate: ({ reptileId, id }) => {
-            const { reptile: old } = queryClient.getQueryData(["reptile", reptileId])
-            const updated = {
-                ...old,
-                Schedule: old.Schedule.filter((schedule) => schedule.id != id)
-            }
-            queryClient.setQueryData(["reptile", reptileId], updated);
-        },
         mutationFn: del,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["reptile", variables.reptileId] })
+        onSettled: () => {
+            queryClient.invalidateQueries(["reptile", variables.reptileId])
         }
     })
 
