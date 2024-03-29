@@ -226,3 +226,114 @@
 {
 }
 ```
+
+# Schedule Controller
+
+## Creating A New Schedule
+**Endpoint:** `/reptileId`
+
+**Method:** `POST`
+
+**Description:** Creates a new schedule for a reptile. Output contains a new schedule object or an error.
+
+**Body:**
+```json
+{
+  "type": "String (Type of the schedule)",
+  "description": "String (Description of the schedule)",
+  "monday": "Boolean (Scheduled for Monday)",
+  "tuesday": "Boolean (Scheduled for Tuesday)",
+  "wednesday": "Boolean (Scheduled for Wednesday)",
+  "thursday": "Boolean (Scheduled for Thursday)",
+  "friday": "Boolean (Scheduled for Friday)",
+  "saturday": "Boolean (Scheduled for Saturday)",
+  "sunday": "Boolean (Scheduled for Sunday)"
+}
+
+**Output:**
+```json
+{
+  "schedule?",
+  "error?"
+}
+```
+### Getting Schedules for a Specific Reptile
+**Endpoint:** ```/:reptileId```
+
+**Method:** ```GET```
+
+**Description:** Retrieves all schedules for a specific reptile. Output will be a list of schedule objects that may or may not be empty, or it may return an error.
+
+**Body:**
+```None```
+
+**Output:**
+```json
+{
+  "schedule",
+  "error?"
+}
+```
+
+### Updating a Specific Schedule
+**Endpoint:** ```/schedule/:scheduleId```
+
+**Method:** ```GET```
+
+**Description:** Updates a specific schedule by its ID. Returns a schedule object or an error.
+**Body:**
+```json
+{
+  "reptileId": "Integer (Reptile ID)",
+  "type": "String (Type of the schedule)",
+  "description": "String (Description of the schedule)",
+  "monday": "Boolean (Scheduled for Monday)",
+  "tuesday": "Boolean (Scheduled for Tuesday)",
+  "wednesday": "Boolean (Scheduled for Wednesday)",
+  "thursday": "Boolean (Scheduled for Thursday)",
+  "friday": "Boolean (Scheduled for Friday)",
+  "saturday": "Boolean (Scheduled for Saturday)",
+  "sunday": "Boolean (Scheduled for Sunday)"
+}
+
+**Output:**
+```json
+{
+  "updatedSchedule?",
+  "error?"
+}
+```
+### Deleting a Specific Schedule
+**Endpoint:** ```/schedule/:scheduleId```
+
+**Method:** ```DELETE```
+
+**Description:** Retrieves all schedules of the authenticated user. Output will be a list of schedule objects that may or may not be empty, or it may return an error.
+
+**Body:**
+```None```
+
+**Output:**
+```json
+{
+  "error?"
+}
+```
+
+### Getting All Schedules of a User
+**Endpoint:** ```/:reptileId```
+
+**Method:** ```GET```
+
+**Description:** Retrieves all schedules of the authenticated user. Output will be a list of schedule objects that may or may not be empty, or it may return an error.
+
+**Body:**
+```None```
+
+**Output:**
+```json
+{
+  "schedule",
+  "error?"
+}
+```
