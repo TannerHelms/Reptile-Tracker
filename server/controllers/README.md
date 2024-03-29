@@ -249,7 +249,7 @@
   "saturday": "Boolean (Scheduled for Saturday)",
   "sunday": "Boolean (Scheduled for Sunday)"
 }
-
+```
 **Output:**
 ```json
 {
@@ -295,7 +295,7 @@
   "saturday": "Boolean (Scheduled for Saturday)",
   "sunday": "Boolean (Scheduled for Sunday)"
 }
-
+```
 **Output:**
 ```json
 {
