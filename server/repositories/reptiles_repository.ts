@@ -90,6 +90,7 @@ export class ReptileRepository {
   }
 
   async deleteReptile(reptileId: number, userId: number) {
+
     // Check if the reptile belongs to the user before deleting
     const existingReptile = await this.db.reptile.findFirst({
       where: {
@@ -97,9 +98,11 @@ export class ReptileRepository {
         userId: userId
       }
     });
+
     if (!existingReptile) {
       throw new Error("Reptile not found or you don't have permission to delete it");
     }
+
     // Delete the reptile
     await this.db.reptile.delete({
       where: {
