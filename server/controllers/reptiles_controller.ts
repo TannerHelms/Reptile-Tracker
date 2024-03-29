@@ -20,7 +20,7 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     try {
       const reptile = await reptileRepository.createReptile({
         userId: userId,
-      species: speciesFormatted,
+        species: speciesFormatted,
         name: name,
         sex: sex
       });
@@ -90,7 +90,6 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     if (!req.user) {
       return res.status(401).json({ error: "User not authenticated" });
     }
-
     const userId = req.user.id; // Extract userId from JWT payload
     const reptileId = Number(req.params.reptileId); // Extract reptileId from URL parameters
 

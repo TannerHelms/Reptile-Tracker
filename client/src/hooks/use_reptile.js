@@ -26,7 +26,19 @@ const useReptile = (id) => {
         },
     })
 
-    return { reptile: reptile?.reptile, isLoading, error, updateReptile, status };
+    const del = (reptileId) => {
+        return api.del(`/reptiles/${reptileId || id}`)
+    }
+
+    const { mutateAsync: deleteReptile } = useMutation({
+        mutationFn: del,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["reptiles"]);
+            queryClient.removeQueries(["reptile", id]);
+        },
+    });
+
+    return { reptile: reptile?.reptile, isLoading, error, updateReptile, status, deleteReptile };
 
 };
 

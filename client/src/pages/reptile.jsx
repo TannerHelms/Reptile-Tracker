@@ -1,4 +1,4 @@
-import { Select, Space } from "@mantine/core";
+import { Button, Modal, Select, Space, Text, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useNavigate, useParams } from "react-router-dom";
 import ConfirmDelete from "../componets/confirm_delete";
@@ -8,14 +8,22 @@ import useAuth from "../hooks/use_auth";
 import useReptile from "../hooks/use_reptile";
 import useReptiles from "../hooks/use_reptiles";
 import useSchedule from "../hooks/use_schedules";
+import capitalize from "capitalize";
+import { FaTrash } from "react-icons/fa";
+import { useDisclosure } from "@mantine/hooks";
+import useFoodItem from "../hooks/use_food_item";
+import { useState } from "react";
 
 const Reptile = () => {
   useAuth();
   const id = useParams().id;
   const { reptiles } = useReptiles();
   const { reptile, isLoading } = useReptile(id);
+  const { createFoodItem, deleteFoodItem } = useFoodItem(reptile?.id);
   const navigate = useNavigate();
   const { deleteSchedule } = useSchedule();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [foodItem, setFoodItem] = useState("");
 
   const handleDelete = async (e) => {
     const id = e.currentTarget.dataset.key;
@@ -39,43 +47,103 @@ const Reptile = () => {
     navigate(`/reptiles/${id}`);
   };
 
+  const handleCreateFoodItem = () => {
+    createFoodItem(foodItem);
+    close();
+  };
+
   if (isLoading) return null;
 
   return (
-    <div className="flex flex-col gap-3 text-left">
-      {/* Select Reptile */}
-      <Select
-        placeholder="Select Reptile"
-        data={reptiles?.map((reptile) => ({
-          label: reptile.name,
-          value: `${reptile.id}`,
-        }))}
-        value={reptile?.id.toString() || ""}
-        className="max-600"
-        onChange={handleSetReptile}
-      />
-      <Space direction="vertical" size="xl" />
-      {reptile && (
+    <>
+      {/* Create Feeding Modal */}
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Create Feeding"
+        size="sm"
+        padding="md"
+      >
         <div className="flex flex-col gap-3">
-          {/* Container for Reptile Details */}
-          <ReptileDetail reptile={reptile} />
-
-          {/* Container for Reptile Schedules */}
-          <p>Schedules ({reptile?.Schedule?.length || 0})</p>
-          <div className="flex gap-10 overflow-y-auto">
-            {reptile?.Schedule.map((schedule) => {
-              return (
-                <ReptileSchedule
-                  key={schedule.id}
-                  schedule={schedule}
-                  handleDelete={handleDelete}
-                />
-              );
-            })}
-          </div>
+          <Text size="xl" weight={700} ta={"center"}>
+            {reptile?.name}
+          </Text>
+          <TextInput
+            placeholder="Food Item"
+            onChange={(item) => setFoodItem(item.target.value)}
+          />
+          <Button size="lg" fullWidth onClick={handleCreateFoodItem}>
+            Create
+          </Button>
         </div>
-      )}
-    </div>
+      </Modal>
+
+      <div className="flex flex-col gap-3 text-left">
+        {/* Select Reptile */}
+        <Select
+          placeholder="Select Reptile"
+          data={reptiles?.map((reptile) => ({
+            label: reptile.name,
+            value: `${reptile.id}`,
+          }))}
+          value={reptile?.id.toString() || ""}
+          className="max-600"
+          onChange={handleSetReptile}
+        />
+        <Space direction="vertical" size="xl" />
+        {reptile && (
+          <div className="flex flex-col gap-3 ">
+            {/* Container for Reptile Details */}
+            <div className="flex gap-3">
+              <ReptileDetail reptile={reptile} />
+
+              <div className="color-secondary p-3 flex flex-col gap-3 rounded-lg items-center ">
+                <Text size="xl" weight={700} fw={"bold"} ta={"center"}>
+                  Feedings
+                </Text>
+                <div className="w-fit flex flex-col gap-2 mx-5">
+                  {reptile.Feeding?.map((feeding) => {
+                    return (
+                      <div key={feeding.id} className="flex gap-2">
+                        <FaTrash
+                          color="red"
+                          size={"20px"}
+                          className="cursor-pointer"
+                          onClick={() => deleteFoodItem(feeding.id)}
+                        />
+                        <Text size="m" weight={700} ta={"center"}>
+                          {feeding.date}
+                        </Text>
+                        <Text size="m" weight={700} ta={"center"}>
+                          {capitalize.words(feeding.foodItem)}
+                        </Text>
+                      </div>
+                    );
+                  })}
+                </div>
+                <Button size="compact-sm" p={0} fullWidth onClick={open}>
+                  Create
+                </Button>
+              </div>
+            </div>
+
+            {/* Container for Reptile Schedules */}
+            <p>Schedules ({reptile?.Schedule?.length || 0})</p>
+            <div className="flex gap-10 overflow-y-auto">
+              {reptile?.Schedule.map((schedule) => {
+                return (
+                  <ReptileSchedule
+                    key={schedule.id}
+                    schedule={schedule}
+                    handleDelete={handleDelete}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 export default Reptile;

@@ -55,8 +55,8 @@ const Dashboard = () => {
       ),
       labels: { confirm: "Delete reptile", cancel: "No don't delete it" },
       confirmProps: { color: "red" },
-      onConfirm: () => {
-        const resp = deleteReptile.mutateAsync(reptile.id);
+      onConfirm: async () => {
+        const resp = await deleteReptile(reptile.id);
         if (resp.error) {
           notifications.show({
             title: "Error",
@@ -90,6 +90,7 @@ const Dashboard = () => {
   }
   return (
     <>
+      {/* Create Reptile */}
       <Modal
         opened={createModal}
         onClose={closeCreate}
@@ -99,6 +100,8 @@ const Dashboard = () => {
       >
         <CreateReptileModal close={closeCreate} />
       </Modal>
+
+      {/* Edit Reptile */}
       <Modal
         opened={opened}
         onClose={close}

@@ -8,7 +8,7 @@ const appTheme = createTheme({
             vars: (theme, props) => {
                 return {
                     root: {
-                        "--button-height": rem(60),
+                        "--button-height": rem(40),
                     },
                 };
             },

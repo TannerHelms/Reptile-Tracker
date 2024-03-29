@@ -1,12 +1,18 @@
-import { Button, Select, TextInput } from "@mantine/core";
-import React, { useState } from "react";
-import useReptile from "../hooks/use_reptile";
+import {
+  Button,
+  Container,
+  Select,
+  Tabs,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useSetState } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
-import { Container, Tabs, Text } from "@mantine/core";
+import React, { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import classes from "../css/header_tabs.module.css";
-import { notifications } from "@mantine/notifications";
+import useReptiles from "../hooks/use_reptiles";
 
 const tabs = ["Details", "Edit"];
 
@@ -14,11 +20,11 @@ export function ReptileModal({ state, close }) {
   const queryClient = useQueryClient();
   const reptile = queryClient.getQueryData(["reptile"]);
   const [newReptile, setNewReptile] = useSetState({ ...reptile });
-  const { updateReptile } = useReptile();
+  const { updateReptile } = useReptiles();
   const [tab, setTab] = useState(state);
 
   const handleUpdateReptile = async () => {
-    const resp = await updateReptile.mutateAsync(newReptile);
+    const resp = await updateReptile({ reptile: newReptile });
     if (resp.updatedReptile) {
       notifications.show({
         title: "Success",

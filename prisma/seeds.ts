@@ -4,6 +4,8 @@ import { config } from "dotenv";
 import * as bcrypt from "bcryptjs";
 import CreateReptiles from './reptiles';
 import CreateSchedules from './schedules';
+import CreateFeedings from './feedings';
+import CreateHusbandryRecords from './husbandry';
 config();
 
 
@@ -35,7 +37,9 @@ async function main() {
 
   await CreateReptiles(prisma, reptileCount);
   await CreateSchedules(prisma, reptileCount);
-  
+  await CreateFeedings(prisma, reptileCount);
+  await CreateHusbandryRecords(prisma, reptileCount);
+
 }
 
 main()

@@ -44,7 +44,9 @@ export class ReptileRepository {
         userId: userId
       },
       include: {
-        Schedule: true
+        Schedule: true,
+        Feeding: true,
+        HusbandryRecord: true,
       }
     });
   }
@@ -55,7 +57,9 @@ export class ReptileRepository {
         id: id
       },
       include: {
-        Schedule: true
+        Schedule: true,
+        Feeding: true,
+        HusbandryRecord: true,
       }
     });
   }
