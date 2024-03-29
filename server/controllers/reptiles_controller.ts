@@ -135,5 +135,42 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     }
   });
 
+  // Update a specific husbandry record for a reptile
+  router.put("/:reptileId/husbandry/:recordId", authMiddleware, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ error: "User not authenticated" });
+    }
+    const userId = req.user.id;
+    const reptileId = Number(req.params.reptileId);
+    const recordId = Number(req.params.recordId);
+    const { length, weight, temperature, humidity } = req.body;
+  
+    try {
+      const updatedHusbandryRecord = await husbandry_records_repository.updateHusbandryRecord(recordId, length, weight, temperature, humidity);
+      res.status(200).json({ updatedHusbandryRecord });
+    } catch (error) {
+      console.error("Error updating husbandry record:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Delete a specific husbandry record for a reptile
+  router.delete("/:reptileId/husbandry/:recordId", authMiddleware, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ error: "User not authenticated" });
+    }
+    const userId = req.user.id;
+    const reptileId = Number(req.params.reptileId);
+    const recordId = Number(req.params.recordId);
+  
+    try {
+      await husbandry_records_repository.deleteHusbandryRecord(recordId);
+      res.status(204).send(); // No content
+    } catch (error) {
+      console.error("Error deleting husbandry record:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
   return router;
 };

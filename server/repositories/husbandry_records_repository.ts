@@ -34,4 +34,26 @@ export class HusbandryRecordsRepository {
             }
         });
     }
+
+    public async updateHusbandryRecord(recordId: number, length: number, weight: number, temperature: number, humidity: number) {
+        return this.db.husbandryRecord.update({
+            where: {
+                id: recordId
+            },
+            data: {
+                length,
+                weight,
+                temperature,
+                humidity
+            }
+        });
+    }
+
+    public async deleteHusbandryRecord(recordId: number) {
+        await this.db.husbandryRecord.delete({
+            where: {
+                id: recordId
+            }
+        });
+    }
 }
