@@ -3,14 +3,13 @@ import { useDisclosure, useSetState } from "@mantine/hooks";
 import capitalize from "capitalize";
 import React from "react";
 import useReptile from "../hooks/use_reptile";
-import useReptiles from "../hooks/use_reptiles";
 const ReptileDetail = ({ reptile }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [newReptile, setNewReptile] = useSetState({ ...reptile });
-  const { updateReptile } = useReptiles();
+  const { updateReptile } = useReptile();
 
   const handleUpdate = () => {
-    updateReptile({ reptile: newReptile });
+    updateReptile.mutate(newReptile);
     close();
   };
 
@@ -37,7 +36,7 @@ const ReptileDetail = ({ reptile }) => {
             onChange={handleNameChange}
           />
           <Select
-            data={["corn snake", "ball python", "king snake"]}
+            data={["corn snake", "ball python", "king snake", "redtail boa"]}
             defaultValue={reptile.species.slice(0).replace("_", " ")}
             size="md"
             data-key="species"

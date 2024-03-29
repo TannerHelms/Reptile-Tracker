@@ -94,7 +94,7 @@ const Reptile = () => {
         {reptile && (
           <div className="flex flex-col gap-3 ">
             {/* Container for Reptile Details */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 overflow-y-auto p-2">
               <ReptileDetail reptile={reptile} />
 
               <div className="color-secondary p-3 flex flex-col gap-3 rounded-lg items-center justify-between">
@@ -129,7 +129,7 @@ const Reptile = () => {
 
             {/* Container for Reptile Schedules */}
             <p>Schedules ({reptile?.Schedule?.length || 0})</p>
-            <div className="flex gap-10 overflow-y-auto">
+            <div className="flex gap-10 overflow-y-auto p-2">
               {reptile?.Schedule.map((schedule) => {
                 return (
                   <ReptileSchedule

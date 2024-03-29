@@ -1,10 +1,9 @@
-import { Button, Modal, Select, Text, TextInput } from "@mantine/core";
+import { Button, Select, Text, TextInput } from "@mantine/core";
 import { useSetState } from "@mantine/hooks";
-import { modals } from "@mantine/modals";
-import { IoCloseSharp } from "react-icons/io5";
-import useReptile from "../hooks/use_reptile";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
+import { IoCloseSharp } from "react-icons/io5";
+import useReptile from "../hooks/use_reptile";
 
 const CreateReptileModal = ({ close }) => {
   const [reptile, setReptile] = useSetState(null);

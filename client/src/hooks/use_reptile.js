@@ -9,27 +9,33 @@ const useReptile = (id) => {
     const queryClient = useQueryClient();
     const token = useSelector(tokenFn)
 
+    // CRUD Functionality for a reptile
     const get = () => api.get(`/reptiles/${id}`)
 
+    const update = (reptile) => api.put(`/reptiles/${reptile.id || id}`, reptile)
+
+    const del = (reptileId) => api.del(`/reptiles/${reptileId || id}`)
+
+
+    // Get a reptile
     const { data: reptile, isLoading, error, status } = useQuery({
         queryKey: ["reptile", parseInt(id)],
         queryFn: get,
         enabled: id != "null" && id != undefined && token.value != null,
     })
 
-    const update = (updatedReptile) => api.put(`/reptiles/${id}`, updatedReptile)
-
+    // Update a reptile
     const updateReptile = useMutation({
         mutationFn: update,
-        onSuccess: () => {
+        onMutate: (reptile) => {
+            queryClient.setQueryData(["reptile", reptile.id], { reptile })
+        },
+        onSettled: () => {
             queryClient.invalidateQueries(["reptile", id])
         },
     })
 
-    const del = (reptileId) => {
-        return api.del(`/reptiles/${reptileId || id}`)
-    }
-
+    // Delete a reptile
     const { mutateAsync: deleteReptile } = useMutation({
         mutationFn: del,
         onSuccess: () => {
