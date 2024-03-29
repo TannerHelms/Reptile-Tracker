@@ -97,7 +97,7 @@ const Reptile = () => {
             <div className="flex gap-3">
               <ReptileDetail reptile={reptile} />
 
-              <div className="color-secondary p-3 flex flex-col gap-3 rounded-lg items-center ">
+              <div className="color-secondary p-3 flex flex-col gap-3 rounded-lg items-center justify-between">
                 <Text size="xl" weight={700} fw={"bold"} ta={"center"}>
                   Feedings
                 </Text>
