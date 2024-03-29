@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { setToken } from "../store/token_slice";
 import useInit from "./use_init";
 import { useNavigate } from "react-router-dom";
+import { turnOnNavbar } from "../store/navbar_slice";
 
 
 const useLogin = () => {
@@ -20,6 +21,7 @@ const useLogin = () => {
             navigate("/");
             queryClient.setQueryData("user", user);
             dispatch(setToken({ token }))
+            dispatch(turnOnNavbar())
         },
     });
 

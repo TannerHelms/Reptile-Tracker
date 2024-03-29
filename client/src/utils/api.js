@@ -40,6 +40,10 @@ export class Api {
   del(uri) {
     return this.makeRequest(uri, "delete");
   }
+  getReptile() {
+    const id = store.getState().reptileId.value;
+    return this.makeRequest(`/reptiles/${id}`, "get");
+  }
 }
 
 export default Api;

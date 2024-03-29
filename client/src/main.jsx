@@ -49,7 +49,7 @@ const router = createHashRouter([
         element: <SignUp />,
       },
       {
-        path: "/reptiles",
+        path: "/reptiles/:id?",
         element: <Reptile />,
       },
       {

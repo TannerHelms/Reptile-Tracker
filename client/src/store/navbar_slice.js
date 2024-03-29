@@ -2,16 +2,21 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const navbarSlice = createSlice({
     name: 'navbar',
-    initialState: false,
+    initialState: {
+        value: false,
+    },
     reducers: {
-        toggleNavbar: (state) => !state,
-        turnOnNavbar: () => true,
-        turnOffNavbar: () => false,
+        turnOnNavbar: (state) => {
+            state.value = true;
+        },
+        turnOffNavbar: (state) => {
+            state.value = false;
+        },
     },
 });
 
-export const { toggleNavbar, turnOnNavbar, turnOffNavbar } = navbarSlice.actions;
+export const { turnOnNavbar, turnOffNavbar } = navbarSlice.actions;
 
 export default navbarSlice.reducer;
 
-export const nav = (state) => state.navbar;
+export const nav = (state) => state.navbar.value;

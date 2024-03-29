@@ -1,28 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { turnOnNavbar } from "../store/navbar_slice";
 import useInit from "./use_init";
+import { useSelector } from "react-redux";
+import { token as tokenFn } from "../store/token_slice";
 
 const useCheckAuth = () => {
-    const { api, navigate, dispatch } = useInit();
+    const { api, navigate } = useInit();
+    const token = useSelector(tokenFn)
     const [isLoading, setIsLoading] = useState(true);
 
     const getMe = () => api.get("/users/me");
 
-    const { data: user, error } = useQuery({
+    const { data: user, error, isLoading: load } = useQuery({
         queryKey: ["user"],
         queryFn: getMe,
+        enabled: token.value != null,
     });
 
     useEffect(() => {
         if (user) {
             navigate("/")
-            dispatch(turnOnNavbar());
         }
-        if (error) {
+        if (!load && !user) {
             setIsLoading(false);
         }
-    }, [user, error])
+    }, [user, error, load])
 
     return { isLoading };
 }

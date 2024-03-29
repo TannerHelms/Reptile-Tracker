@@ -8,6 +8,7 @@ import { nav } from "./store/navbar_slice";
 // todo: check if route is on a auth page or not
 
 const App = () => {
+  const location = useLocation().pathname.split("/")[1];
   const navbar = useSelector(nav);
   const [opened, { toggle }] = useDisclosure();
   const page = useLocation().pathname.substring(1);
@@ -33,12 +34,16 @@ const App = () => {
         </div>
         <div className="fixed inset-x-0 -z-10">
           <Title order={1} ta="center">
-            {(page.charAt(0).toUpperCase() + page.slice(1)).replace("_", " ")}
+            {
+              (page.charAt(0).toUpperCase() + page.slice(1))
+                .replace("_", " ")
+                .split("/")[0]
+            }
           </Title>
         </div>
       </AppShell.Header>
       <AppShell.Navbar>
-        <Navbar close={toggle} />
+        <Navbar close={toggle} active={location} />
       </AppShell.Navbar>
       <AppShell.Main>
         <Outlet />

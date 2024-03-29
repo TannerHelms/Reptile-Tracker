@@ -80,8 +80,7 @@ const Dashboard = () => {
   };
 
   const handleViewReptile = (reptile) => {
-    queryClient.setQueryData(["reptile"], reptile);
-    navigate("/reptiles");
+    navigate(`/reptiles/${reptile.id}`);
   };
 
   if (isLoading) return null;

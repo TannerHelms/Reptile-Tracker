@@ -1,45 +1,33 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useApi from './use_api';
+import { boolean } from 'zod';
+import { useSelector } from 'react-redux';
+import { token as tokenFn } from '../store/token_slice';
 
-const useReptile = () => {
+const useReptile = (id) => {
     const api = useApi();
     const queryClient = useQueryClient();
-    // { reptile, error }
-    const create = (reptile) => api.post("/reptiles", { ...reptile });
-    const createReptile = useMutation({
-        mutationFn: create,
-        onSuccess: ({ reptile }) => {
-            queryClient.invalidateQueries(["reptiles"]);
-            queryClient.setQueryData(["reptile"], reptile);
-        }
+    const token = useSelector(tokenFn)
 
+    const get = () => api.get(`/reptiles/${id}`)
+
+    const { data: reptile, isLoading, error, status } = useQuery({
+        queryKey: ["reptile", parseInt(id)],
+        queryFn: get,
+        enabled: id != "null" && id != undefined && token.value != null,
     })
 
-    // { reptile, error }
-    const getReptile = (id) => api.get(`/reptiles/${id}`);
-
-    // { updatedReptile, error }
-    const update = (reptile) => api.put(`/reptiles/${reptile.id}`, { ...reptile });
+    const update = (updatedReptile) => api.put(`/reptiles/${id}`, updatedReptile)
 
     const updateReptile = useMutation({
         mutationFn: update,
-        onSuccess: ({ updatedReptile }) => {
-            queryClient.invalidateQueries(["reptiles"]);
-            queryClient.setQueryData(["reptile"], updatedReptile);
-        }
-    });
-
-    // { error }
-    const del = (id) => api.del(`/reptiles/${id}`);
-    const deleteReptile = useMutation({
-        mutationFn: del,
         onSuccess: () => {
-            queryClient.invalidateQueries(["reptiles"]);
-        }
-
+            queryClient.invalidateQueries(["reptile", id])
+        },
     })
 
-    return { createReptile, getReptile, updateReptile, deleteReptile };
+    return { reptile: reptile?.reptile, isLoading, error, updateReptile, status };
+
 };
 
 export default useReptile;

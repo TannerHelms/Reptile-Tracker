@@ -1,27 +1,40 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useApi from "./use_api";
+import { useSelector } from "react-redux";
+import { token as tokenFn } from "../store/token_slice";
 
 const useSchedules = () => {
     const api = useApi();
+    const token = useSelector(tokenFn)
     const queryClient = useQueryClient();
     const getSchedules = () => api.get("/reptiles-schedules");
 
     const update = (schedule) => api.put(`/schedules/schedule/${schedule.id}`, { ...schedule });
 
-    const del = async ({ reptileId, id }) => {
-        console.log(reptileId, id)
-        const resp = await api.del(`schedules/schedule/${id}`)
-        const { reptile } = await api.get(`/reptiles/${reptileId}`);
-        queryClient.setQueryData(["reptile"], reptile);
-        console.log(reptile)
-        return reptile;
-    };
+    const del = async ({ reptileId, id }) => api.del(`schedules/schedule/${id}`)
+
+    const { mutateAsync: deleteSchedule, variables } = useMutation({
+        onMutate: ({ reptileId, id }) => {
+            const { reptile: old } = queryClient.getQueryData(["reptile", reptileId])
+            const updated = {
+                ...old,
+                Schedule: old.Schedule.filter((schedule) => schedule.id != id)
+            }
+            queryClient.setQueryData(["reptile", reptileId], updated);
+        },
+        mutationFn: del,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["reptile", variables.reptileId] })
+        }
+    })
 
     const create = (schedule) => api.post(`/schedules/${schedule.reptileId}`, { ...schedule });
 
     const query = {
+        isFetchingOptimistic: true,
         queryKey: ["schedules"],
         queryFn: getSchedules,
+        enabled: token.value != null,
     }
 
     const { mutateAsync: updateSchedule } = useMutation({
@@ -29,12 +42,7 @@ const useSchedules = () => {
         onSettled: () => queryClient.invalidateQueries(["schedules"])
     });
 
-    const { mutateAsync: deleteSchedule } = useMutation({
-        mutationFn: del,
-        onSuccess: async () => {
-            queryClient.invalidateQueries(["schedules", "reptiles"])
-        }
-    })
+
 
     const { mutateAsync: createSchedule, error: createError } = useMutation({
         mutationFn: create,
