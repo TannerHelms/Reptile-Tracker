@@ -35,6 +35,7 @@ async function main() {
 
   await CreateReptiles(prisma, reptileCount);
   await CreateSchedules(prisma, reptileCount);
+  
 }
 
 main()

@@ -4,8 +4,6 @@ import {
   IconLogout,
   IconSpider,
 } from "@tabler/icons-react";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
 import classes from "../css/navbar.module.css";
 import useInit from "../hooks/use_init";
 import useLogout from "../hooks/use_logout";
