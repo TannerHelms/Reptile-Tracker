@@ -24,7 +24,7 @@ export function ReptileModal({ state, close }) {
   const [tab, setTab] = useState(state);
 
   const handleUpdateReptile = async () => {
-    const resp = await updateReptile.mutateAsync(newReptile);
+    const resp = await updateReptile(newReptile);
     if (resp.updatedReptile) {
       close();
       notifications.show({

@@ -15,7 +15,7 @@ const CreateReptileModal = ({ close }) => {
       setError("Please fill out all fields");
       return;
     }
-    const resp = await createReptile.mutateAsync(reptile);
+    const resp = await createReptile(reptile);
     if (resp.error) {
       notifications.show({
         title: "Error",
