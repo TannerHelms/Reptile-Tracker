@@ -21,6 +21,8 @@ const useReptile = (id) => {
 
     const update = (reptile) => api.put(`/reptiles/${reptile.id || id}`, reptile)
 
+    const create = (reptile) => api.post(`/reptiles`, reptile)
+
     const del = (reptileId) => api.del(`/reptiles/${reptileId || id}`)
 
 
@@ -32,12 +34,20 @@ const useReptile = (id) => {
     })
 
     // Update a reptile
-    const updateReptile = useMutation({
+    const { mutateAsync: updateReptile } = useMutation({
         mutationFn: update,
         onSettled: () => {
             queryClient.invalidateQueries(["reptile", id])
         },
     })
+
+    // Create a reptile
+    const { mutateAsync: createReptile } = useMutation({
+        mutationFn: create,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["reptiles"]);
+        },
+    });
 
     // Delete a reptile
     const { mutateAsync: deleteReptile } = useMutation({
@@ -48,7 +58,7 @@ const useReptile = (id) => {
         },
     });
 
-    return { reptile, updateReptile, deleteReptile };
+    return { reptile, updateReptile, deleteReptile, createReptile };
 
 };
 
