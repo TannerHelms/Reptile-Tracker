@@ -19,7 +19,7 @@ const useCheckAuth = () => {
 
     useEffect(() => {
         if (user) {
-            navigate("/")
+            navigate("/dashboard")
         }
         if (!load && !user) {
             setIsLoading(false);

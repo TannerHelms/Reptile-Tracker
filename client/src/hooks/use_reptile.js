@@ -34,14 +34,8 @@ const useReptile = (id) => {
     // Update a reptile
     const updateReptile = useMutation({
         mutationFn: update,
-        onMutate: (reptile) => {
-            queryClient.setQueryData(["reptile", reptile.id], { reptile })
-            queryClient.setQueryData(["reptiles"], (old) => {
-                return old?.map((r) => r.id == reptile.id ? reptile : r)
-            })
-        },
         onSettled: () => {
-            // queryClient.invalidateQueries(["reptile", id])
+            queryClient.invalidateQueries(["reptile", id])
         },
     })
 
