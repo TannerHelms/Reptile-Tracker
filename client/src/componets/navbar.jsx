@@ -1,30 +1,22 @@
 import {
+  IconCalendar,
   IconLayoutDashboard,
   IconLogout,
   IconSpider,
 } from "@tabler/icons-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
 import classes from "../css/navbar.module.css";
 import useInit from "../hooks/use_init";
 import useLogout from "../hooks/use_logout";
 
 const data = [
-  { link: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
-  { link: "/reptiles", label: "Reptiles", icon: IconSpider },
+  { link: "dashboard", label: "Dashboard", icon: IconLayoutDashboard },
+  { link: "reptiles", label: "Reptiles", icon: IconSpider },
+  { link: "create_schedule", label: "Schedule", icon: IconCalendar },
 ];
 
-function Navbar({ close }) {
-  const queryClient = useQueryClient();
-  const location = useLocation();
+function Navbar({ close, active }) {
   const { logout } = useLogout();
-  const [active, setActive] = useState(location.pathname);
-
-  if (active === "/login") setActive("/dashboard");
-
   const { navigate } = useInit();
-
   const handleSignOut = async () => {
     close();
     logout();
@@ -38,7 +30,7 @@ function Navbar({ close }) {
       key={item.label}
       onClick={(event) => {
         event.preventDefault();
-        setActive(item.link);
+        // setActive(item.link);
         navigate(item.link);
         close();
       }}

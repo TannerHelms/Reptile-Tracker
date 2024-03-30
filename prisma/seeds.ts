@@ -3,6 +3,9 @@ const prisma = new PrismaClient();
 import { config } from "dotenv";
 import * as bcrypt from "bcryptjs";
 import CreateReptiles from './reptiles';
+import CreateSchedules from './schedules';
+import CreateFeedings from './feedings';
+import CreateHusbandryRecords from './husbandry';
 config();
 
 
@@ -29,7 +32,14 @@ async function main() {
       password_hash: bcrypt.hashSync(process.env.ADMIN_PASSWORD!!),
     }
   })
-  // await CreateReptiles(prisma, 10);
+
+  const reptileCount = 10;
+
+  await CreateReptiles(prisma, reptileCount);
+  await CreateSchedules(prisma, reptileCount);
+  await CreateFeedings(prisma, reptileCount);
+  await CreateHusbandryRecords(prisma, reptileCount);
+
 }
 
 main()

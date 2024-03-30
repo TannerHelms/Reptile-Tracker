@@ -21,10 +21,10 @@ export class ReptileRepository {
     return this.instance;
   }
 
-  async createReptile({userId, species, name, sex}: CreateReptilePayload) {
+  async createReptile({ userId, species, name, sex }: CreateReptilePayload) {
     // Check if the provided species is allowed
     const allowedSpecies = ["ball_python", "king_snake", "corn_snake", "redtail_boa"];
-    if (!allowedSpecies.includes(species)){
+    if (!allowedSpecies.includes(species)) {
       throw new Error('Invalid species. Must be one of "ball_python", "king_snake", "corn_snake", "redtail_boa"')
     }
     // If the user exists and its an allowed species, proceed to create the reptile
@@ -43,6 +43,11 @@ export class ReptileRepository {
       where: {
         userId: userId
       },
+      include: {
+        Schedule: true,
+        Feeding: true,
+        HusbandryRecord: true,
+      }
     });
   }
 
@@ -51,10 +56,15 @@ export class ReptileRepository {
       where: {
         id: id
       },
+      include: {
+        Schedule: true,
+        Feeding: true,
+        HusbandryRecord: true,
+      }
     });
   }
 
-  async updateReptile(reptileId: number, {userId, species, name, sex}: CreateReptilePayload) {
+  async updateReptile(reptileId: number, { userId, species, name, sex }: CreateReptilePayload) {
     // Check if the reptile belongs to the user before updating
     const existingReptile = await this.db.reptile.findFirst({
       where: {
@@ -80,6 +90,7 @@ export class ReptileRepository {
   }
 
   async deleteReptile(reptileId: number, userId: number) {
+
     // Check if the reptile belongs to the user before deleting
     const existingReptile = await this.db.reptile.findFirst({
       where: {
@@ -87,9 +98,11 @@ export class ReptileRepository {
         userId: userId
       }
     });
+
     if (!existingReptile) {
       throw new Error("Reptile not found or you don't have permission to delete it");
     }
+
     // Delete the reptile
     await this.db.reptile.delete({
       where: {

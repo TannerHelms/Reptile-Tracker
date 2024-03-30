@@ -1,12 +1,18 @@
-import { Button, Select, TextInput } from "@mantine/core";
-import React, { useState } from "react";
-import useReptile from "../hooks/use_reptile";
+import {
+  Button,
+  Container,
+  Select,
+  Tabs,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useSetState } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
-import { Container, Tabs, Text } from "@mantine/core";
+import React, { useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import classes from "../css/header_tabs.module.css";
-import { notifications } from "@mantine/notifications";
+import useReptile from "../hooks/use_reptile";
 
 const tabs = ["Details", "Edit"];
 
@@ -20,6 +26,7 @@ export function ReptileModal({ state, close }) {
   const handleUpdateReptile = async () => {
     const resp = await updateReptile.mutateAsync(newReptile);
     if (resp.updatedReptile) {
+      close();
       notifications.show({
         title: "Success",
         message: "Successfully updated reptile",
@@ -46,6 +53,11 @@ export function ReptileModal({ state, close }) {
     setTab(value.currentTarget.dataset.id);
   };
 
+  const handleClose = () => {
+    queryClient.setQueryData(["reptile"], null);
+    close();
+  };
+
   if (!reptile) return null;
 
   return (
@@ -55,7 +67,7 @@ export function ReptileModal({ state, close }) {
           <Text fz="xl" fw={500} className="text-center ">
             {reptile.name}
           </Text>
-          <p className="absolute right-4 cursor-pointer" onClick={close}>
+          <p className="absolute right-4 cursor-pointer" onClick={handleClose}>
             <IoCloseSharp />
           </p>
         </div>

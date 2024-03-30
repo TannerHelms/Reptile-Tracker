@@ -2,17 +2,16 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { getPersistConfig } from 'redux-deep-persist';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import navbarReducer from './navbar_slice';
 import tokenReducer from './token_slice';
+import navbarReducer from './navbar_slice';
 const rootReducer = combineReducers({
-
-    navbar: navbarReducer,
     token: tokenReducer,
+    navbar: navbarReducer,
 })
 
 const persistConfig = getPersistConfig({
     key: 'root',
-storage,
+    storage,
     whitelist: ['token'],
     rootReducer,
 });

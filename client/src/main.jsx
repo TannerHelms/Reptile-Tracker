@@ -25,6 +25,7 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import CreateSchedule from "./pages/create_schedule.jsx";
 
 const router = createHashRouter([
   {
@@ -48,8 +49,12 @@ const router = createHashRouter([
         element: <SignUp />,
       },
       {
-        path: "/reptiles",
+        path: "/reptiles/:id?",
         element: <Reptile />,
+      },
+      {
+        path: "/create_schedule",
+        element: <CreateSchedule />,
       },
     ],
   },

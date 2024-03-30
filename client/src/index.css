@@ -12,6 +12,10 @@
   background-image: linear-gradient(315deg, #182b3a 0%, #20a4f3 74%) !important;
 }
 
+.color-secondary {
+  background-color: #eef2f3;
+}
+
 .item {
   -webkit-animation: fadein 0.3s linear forwards;
   animation: fadein 0.3s linear forwards;
