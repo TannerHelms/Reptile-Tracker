@@ -14,9 +14,6 @@ import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import useLogin from "../hooks/use_login";
 import useCheckAuth from "../hooks/use_auth_check";
-import { useDispatch } from "react-redux";
-import { turnOffNavbar } from "../store/navbar_slice";
-import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,10 +21,7 @@ const schema = z.object({
 });
 
 const Login = () => {
-  const navigate = useNavigate();
   const { login, error } = useLogin();
-  const dispatch = useDispatch();
-  dispatch(turnOffNavbar());
   const form = useForm({
     initialValues: {
       email: "",
@@ -35,12 +29,6 @@ const Login = () => {
     },
     validate: zodResolver(schema),
   });
-
-  const handleSignUp = (e) => {
-    e.preventDefault();
-    navigate("/sign_up");
-  };
-
   const { isLoading } = useCheckAuth();
   if (isLoading) return null;
 
@@ -81,7 +69,7 @@ const Login = () => {
           </Button>
           <Text c="dimmed" size="sm" ta="center" mt="lg">
             Do not have an account yet?{" "}
-            <Anchor size="sm" onClick={handleSignUp} component="button">
+            <Anchor href='/sign_up' size="sm" component="button">
               Create account
             </Anchor>
           </Text>

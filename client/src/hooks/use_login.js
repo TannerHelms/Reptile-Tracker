@@ -18,9 +18,10 @@ const useLogin = () => {
         queryKey: ["user"],
         mutationFn: login,
         onSuccess: ({ user, token }) => {
-            queryClient.setQueryData(["user"], user);
+            navigate("/");
+            queryClient.setQueryData("user", user);
             dispatch(setToken({ token }))
-            navigate("/dashboard");
+            dispatch(turnOnNavbar())
         },
     });
 
