@@ -63,16 +63,13 @@ const Login = () => {
           />
           <Group justify="space-between" mt="lg">
             <Checkbox label="Remember me" />
-            <Anchor component="button" size="sm">
-              Forgot password?
-            </Anchor>
           </Group>
           <Button fullWidth mt="xl" type="submit">
             Sign in
           </Button>
           <Text c="dimmed" size="sm" ta="center" mt="lg">
             Do not have an account yet?{" "}
-            <Anchor size="sm" component="button">
+            <Anchor href='/sign_up' size="sm" component="button">
               Create account
             </Anchor>
           </Text>

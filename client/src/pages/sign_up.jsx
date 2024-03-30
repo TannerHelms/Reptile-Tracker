@@ -1,11 +1,13 @@
 import { Button } from "@mantine/core";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const navigate = useNavigate();
   async function createUser(e) {
     e.preventDefault();
     const res = await fetch("/users", {
@@ -20,6 +22,10 @@ const SignUp = () => {
         lastName,
       }),
     });
+
+    if (res.ok) {
+      navigate("/dashboard");
+    }
   }
 
   return (
