@@ -16,6 +16,7 @@ import Reptile from "./pages/reptile.jsx";
 import { persistor, store } from "./store/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 import Login from "./pages/login.jsx";
+import Home from "./pages/home.jsx";
 import "@mantine/notifications/styles.css";
 import {
   QueryCache,
@@ -34,7 +35,15 @@ const router = createHashRouter([
     children: [
       {
         path: "",
-        element: <Navigate to="/dashboard" />,
+        element: <Home />,
+      },
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/home",
+        element: <Home />,
       },
       {
         path: "/dashboard",
