@@ -35,6 +35,7 @@ const Login = () => {
   const redirectToSignUp = () => {
     navigate("/sign_up");
   };
+  
   const { isLoading } = useCheckAuth();
   if (isLoading) return null;
 
