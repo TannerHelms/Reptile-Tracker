@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
+import { useNavigate } from "react-router-dom";
 import useLogin from "../hooks/use_login";
 import useCheckAuth from "../hooks/use_auth_check";
 
@@ -21,6 +22,7 @@ const schema = z.object({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
   const { login, error } = useLogin();
   const form = useForm({
     initialValues: {
@@ -29,6 +31,10 @@ const Login = () => {
     },
     validate: zodResolver(schema),
   });
+
+  const redirectToSignUp = () => {
+    navigate("/sign_up");
+  };
   const { isLoading } = useCheckAuth();
   if (isLoading) return null;
 
@@ -69,7 +75,7 @@ const Login = () => {
           </Button>
           <Text c="dimmed" size="sm" ta="center" mt="lg">
             Do not have an account yet?{" "}
-            <Anchor href='/sign_up' size="sm" component="button">
+            <Anchor onClick={redirectToSignUp} size="sm" component="button">
               Create account
             </Anchor>
           </Text>

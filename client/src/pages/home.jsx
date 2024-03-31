@@ -1,10 +1,7 @@
-import useCheckAuth from "../hooks/use_auth_check";
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import useAuthCheck from "../hooks/use_auth_check";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
-    Anchor,
-    Button,
     Center,
     Container,
     Title,
@@ -13,18 +10,17 @@ import {
   } from "@mantine/core";
 
 const Home = () => {
+    const { isLoading } = useAuthCheck();
     const navigate = useNavigate();
-    const { isLoading } = useCheckAuth();
+    if (isLoading) navigate('/dashboard');
+
     return (
         // nav bar with links to login and dashboard pages
         <div>
             <Paper padding="lg" shadow="xs" className="background-gradient" style={{ display: 'flex', justifyContent: 'space-between', backgroundColor: '#6C63FF', width: '100%' }}>
                 <Container size="lg" style={{ display: 'flex', alignItems: 'flex-start' }}>
-                    <div>
-                        <Link to="/dashboard" style={{ textDecoration: 'none', color: 'white', marginRight: '15px' }}>Dashboard</Link>
-                        <Link to="/login" style={{ textDecoration: 'none', color: 'white', marginRight: '15px' }}>Login</Link>
-                        <Link to="/sign_up" style={{ textDecoration: 'none', color: 'white' }}>Register</Link>
-                    </div>
+                    <Link to="/login" style={{ textDecoration: 'none', color: 'white', marginRight: '15px' }}>Login</Link>
+                    <Link to="/sign_up" style={{ textDecoration: 'none', color: 'white' }}>Register</Link>
                 </Container>
             </Paper>
             <Center className="w-screen h-screen background-gradient">
