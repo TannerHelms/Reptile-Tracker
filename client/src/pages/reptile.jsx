@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ConfirmDelete from "../componets/confirm_delete";
 import ReptileDetail from "../componets/reptile_detail";
 import ReptileSchedule from "../componets/reptile_schedule";
+import HusbandryTile from "../componets/husbandry_tile";
 import useAuth from "../hooks/use_auth";
 import useReptile from "../hooks/use_reptile";
 import useReptiles from "../hooks/use_reptiles";
@@ -52,6 +53,8 @@ const Reptile = () => {
   };
 
   if (reptile.isLoading) return null;
+
+  console.log(reptile?.data?.HusbandryRecord);
 
   return (
     <>
@@ -135,6 +138,19 @@ const Reptile = () => {
                     key={schedule.id}
                     schedule={schedule}
                     handleDelete={handleDelete}
+                  />
+                );
+              })}
+            </div>
+            
+            {/* Container for Reptile Husbandry Records */}
+            <p>Husbandry Records ({reptile?.data?.Schedule?.length || 0})</p>
+            <div className="flex gap-10 overflow-y-auto p-2">
+              {reptile?.data?.HusbandryRecord.map((record) => {
+                return (
+                  <HusbandryTile 
+                    key={record.id}
+                    record={record}
                   />
                 );
               })}
