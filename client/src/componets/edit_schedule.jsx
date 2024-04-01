@@ -1,31 +1,41 @@
 import { Button, Modal, Select, Space } from "@mantine/core";
 import useSchedules from "../hooks/use_schedules";
 import { useSetState } from "@mantine/hooks";
+import { useEffect, useState } from "react";
 
 const EditSchedule = ({ schedule, opened, onClose }) => {
-  const [updatedSchedule, setUpdatedSchedule] = useSetState(schedule);
-  const { update } = useSchedules();
+  const [state, setState] = useState(structuredClone(schedule));
+  const { updateSchedule } = useSchedules();
+
+  useEffect(() => {
+    setState(structuredClone(schedule));
+  }, [schedule]);
 
   if (!schedule) return null;
 
   const handleUpdate = () => {
-    console.log(updatedSchedule);
+    updateSchedule(state);
+  };
+
+  const handleState = (v, t) => {
+    setState((old) => {
+      return {
+        ...old,
+        [t.toLowerCase()]: v === "T" ? true : false,
+      };
+    });
   };
 
   return (
     <Modal opened={opened} onClose={onClose} title="Edit Schedule">
       <div className="flex flex-col gap-3 mb-3">
-        <Day
-          text="Monday"
-          value={schedule.monday}
-          onChange={(v) => setUpdatedSchedule({ monday: v })}
-        />
-        <Day text="Tuesday" value={schedule.tuesday} />
-        <Day text="Wednesday" value={schedule.wednesday} />
-        <Day text="Thursday" value={schedule.thursday} />
-        <Day text="Friday" value={schedule.friday} />
-        <Day text="Saturday" value={schedule.saturday} />
-        <Day text="Sunday" value={schedule.sunday} />
+        <Day text="Monday" value={schedule.monday} change={handleState} />
+        <Day text="Tuesday" value={schedule.tuesday} change={handleState} />
+        <Day text="Wednesday" value={schedule.wednesday} change={handleState} />
+        <Day text="Thursday" value={schedule.thursday} change={handleState} />
+        <Day text="Friday" value={schedule.friday} change={handleState} />
+        <Day text="Saturday" value={schedule.saturday} change={handleState} />
+        <Day text="Sunday" value={schedule.sunday} change={handleState} />
       </div>
       <Button size="lg" fullWidth onClick={handleUpdate}>
         Update
@@ -36,7 +46,7 @@ const EditSchedule = ({ schedule, opened, onClose }) => {
 
 export default EditSchedule;
 
-const Day = ({ text, value, onChange }) => {
+const Day = ({ text, value, change }) => {
   return (
     <div className="flex justify-between">
       <p>{text}</p>
@@ -44,7 +54,7 @@ const Day = ({ text, value, onChange }) => {
         data={["T", "F"]}
         defaultValue={value ? "T" : "F"}
         className="w-20"
-        onChange={(v) => onChange(v)}
+        onChange={(v) => change(v, text)}
       />
     </div>
   );
