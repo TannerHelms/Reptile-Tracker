@@ -27,6 +27,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import CreateSchedule from "./pages/create_schedule.jsx";
+import CreateHusbandryRecord from "./pages/create_husbandry.jsx";
 
 const router = createHashRouter([
   {
@@ -64,6 +65,10 @@ const router = createHashRouter([
       {
         path: "/create_schedule",
         element: <CreateSchedule />,
+      },
+      {
+        path: "/create_husbandry",
+        element: <CreateHusbandryRecord />,
       },
     ],
   },

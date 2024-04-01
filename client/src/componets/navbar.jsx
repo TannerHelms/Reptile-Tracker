@@ -3,6 +3,7 @@ import {
   IconLayoutDashboard,
   IconLogout,
   IconSpider,
+  IconDetails,
 } from "@tabler/icons-react";
 import classes from "../css/navbar.module.css";
 import useInit from "../hooks/use_init";
@@ -12,6 +13,7 @@ const data = [
   { link: "dashboard", label: "Dashboard", icon: IconLayoutDashboard },
   { link: "reptiles", label: "Reptiles", icon: IconSpider },
   { link: "create_schedule", label: "Schedule", icon: IconCalendar },
+  { link: "create_husbandry", label: "Husbandry", icon: IconDetails },
 ];
 
 function Navbar({ close, active }) {

@@ -54,8 +54,6 @@ const Reptile = () => {
 
   if (reptile.isLoading) return null;
 
-  console.log(reptile?.data?.HusbandryRecord);
-
   return (
     <>
       {/* Create Feeding Modal */}
