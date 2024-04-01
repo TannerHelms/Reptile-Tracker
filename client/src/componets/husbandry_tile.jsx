@@ -24,7 +24,7 @@ const HusbandryTile = ({ record }) => {
       </div>
       <div className="flex between justify-between w-full">
         <p>Humidity</p>
-        <p>{`${(record.humidity * 100).toFixed(1)}%`}</p>
+        <p>{`${(record.humidity).toFixed(1)}%`}</p>
       </div>
       <div className="flex between justify-between w-full">
         <p>Created At</p>

@@ -18,13 +18,7 @@ import {
     const { createHusbandry } = useHusbandry();
     const [active, setActive] = useState(0);
     const reptiles = useReptiles();
-    const [husbandry, setHusbandry] = useSetState({
-      reptileId: 0,
-      length: 0,
-      weight: 0,
-      temperature: 0,
-      humidity: 0,
-    });
+    const [reptileId, setReptileId] = useState(0);
     const [length, setLength] = useState(0);
     const [weight, setWeight] = useState(0);
     const [temperature, setTemperature] = useState(0);
@@ -37,18 +31,19 @@ import {
   
     const handleCreateHusbandryRecord = async (e) => {
         e.preventDefault();
-        console.log(husbandry);
-        const res = await createHusbandry(husbandry.reptileId, husbandry);
+        const res = await createHusbandry(reptileId, {length, weight, temperature, humidity});
 
-        if (!res.ok) {
-            notifications.show({
-                title: "Error",
-                message: "Failed to create the husbandry record",
-            });
-        } else {
+        console.log(res)
+        if (res) {
             notifications.show({
                 title: "Success",
                 message: "Successfully created the husbandry record",
+            });
+            navigate("/dashboard");
+        } else {
+            notifications.show({
+                title: "Failed",
+                message: "Failed to create the husbandry record",
             });
             navigate("/dashboard");
         }
@@ -67,13 +62,13 @@ import {
               Step 1 content: Select a reptile
               <Select
                 key={1}
-                value={husbandry.reptileId}
+                value={reptileId}
                 placeholder="Select Reptile"
                 data={reptiles?.data?.map((reptile) => ({
                   label: reptile.name,
                   value: `${reptile.id}`,
                 }))}
-                onChange={(value) => setHusbandry({ reptileId: value })}
+                onChange={setReptileId}
               />
             </Stepper.Step>
             <Stepper.Step
@@ -109,7 +104,7 @@ import {
             <Stepper.Completed>
               Click on the button to create your schedule!
               <div className="flex flex-col gap-2">
-                <p>Reptile Id: {husbandry.reptileId}</p>
+                <p>Reptile Id: {reptileId}</p>
                 <p>Length: {length}</p>
                 <p>Weight: {weight}</p>
                 <p>Temperature: {temperature}</p>
