@@ -8,7 +8,6 @@ const CreateReptiles = async (db: PrismaClient, ct: number) => {
                 id: i,
             },
             create: {
-                id: i,
                 userId: 1,
                 species: faker.helpers.arrayElement(["ball_python", "king_snake", "corn_snake", "redtail_boa"]),
                 name: faker.person.firstName(),

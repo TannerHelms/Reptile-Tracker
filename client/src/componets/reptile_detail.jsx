@@ -9,7 +9,8 @@ const ReptileDetail = ({ reptile }) => {
   const { updateReptile } = useReptile();
 
   const handleUpdate = () => {
-    updateReptile.mutate(newReptile);
+    console.log("here");
+    updateReptile(newReptile);
     close();
   };
 
