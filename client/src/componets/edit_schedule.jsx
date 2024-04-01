@@ -14,6 +14,7 @@ const EditSchedule = ({ schedule, opened, onClose }) => {
   if (!schedule) return null;
 
   const handleUpdate = () => {
+    onClose();
     updateSchedule(state);
   };
 

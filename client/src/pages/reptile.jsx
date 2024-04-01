@@ -109,7 +109,7 @@ const Reptile = () => {
         {reptile?.data && (
           <div className="flex flex-col gap-3 ">
             {/* Container for Reptile Details */}
-            <div className="flex gap-3 overflow-y-auto p-2">
+            <div className="flex gap-3 overflow-y-auto p-2 m-auto">
               {reptile?.data && <ReptileDetail reptile={reptile.data} />}
 
               <div className="color-secondary p-3 flex flex-col gap-3 rounded-lg items-center justify-between">
