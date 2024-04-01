@@ -14,7 +14,7 @@ async function main() {
 
   await prisma.user.upsert({
     where: {
-      id: 1,
+      email: process.env.ADMIN_EMAIL!!,
     },
     create: {
       firstName: "SITE",
@@ -23,7 +23,7 @@ async function main() {
       password_hash: bcrypt.hashSync(process.env.ADMIN_PASSWORD!!),
       profile: {
         create: {
-          id: 1,
+
         }
       }
     },

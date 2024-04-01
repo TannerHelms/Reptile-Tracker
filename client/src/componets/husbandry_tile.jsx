@@ -1,7 +1,4 @@
-import {
-  Divider,
-  Text,
-} from "@mantine/core";
+import { Divider, Text } from "@mantine/core";
 
 const HusbandryTile = ({ record }) => {
   return (
@@ -40,6 +37,5 @@ const HusbandryTile = ({ record }) => {
     </div>
   );
 };
-  
+
 export default HusbandryTile;
-  

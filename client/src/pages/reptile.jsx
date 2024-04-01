@@ -54,8 +54,6 @@ const Reptile = () => {
 
   if (reptile.isLoading) return null;
 
-  console.log(reptile?.data?.HusbandryRecord);
-
   return (
     <>
       {/* Create Feeding Modal */}
@@ -142,17 +140,14 @@ const Reptile = () => {
                 );
               })}
             </div>
-            
+
             {/* Container for Reptile Husbandry Records */}
-            <p>Husbandry Records ({reptile?.data?.Schedule?.length || 0})</p>
+            <p>
+              Husbandry Records ({reptile?.data?.HusbandryRecord?.length || 0})
+            </p>
             <div className="flex gap-10 overflow-y-auto p-2">
               {reptile?.data?.HusbandryRecord.map((record) => {
-                return (
-                  <HusbandryTile 
-                    key={record.id}
-                    record={record}
-                  />
-                );
+                return <HusbandryTile key={record.id} record={record} />;
               })}
             </div>
           </div>
