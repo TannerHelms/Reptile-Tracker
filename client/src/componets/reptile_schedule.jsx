@@ -1,7 +1,7 @@
 import { Button, Divider, Text } from "@mantine/core";
 import React from "react";
 import capitilize from "capitalize";
-const ReptileSchedule = ({ schedule, handleDelete }) => {
+const ReptileSchedule = ({ schedule, handleDelete, click }) => {
   return (
     <div
       className="color-secondary  p-5 rounded-lg shadow-md flex flex-col gap-3 w-96 min-w-96"
@@ -43,7 +43,7 @@ const ReptileSchedule = ({ schedule, handleDelete }) => {
       <Button color="red" data-key={schedule.id} onClick={handleDelete}>
         Delete
       </Button>
-      <Button>Edit</Button>
+      <Button onClick={click}>Edit</Button>
     </div>
   );
 };

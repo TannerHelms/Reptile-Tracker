@@ -9,7 +9,7 @@ const useSchedules = () => {
     const queryClient = useQueryClient();
     const getSchedules = () => api.get("/reptiles-schedules");
 
-    const update = (schedule) => api.put(`/schedules/schedule/${schedule.id}`, { ...schedule });
+    const update = (schedule) => api.put(`/schedules/schedule/${schedule.id}`, { ...schedule })
 
     const del = async ({ reptileId, id }) => api.del(`schedules/schedule/${id}`)
 
@@ -31,7 +31,9 @@ const useSchedules = () => {
 
     const { mutateAsync: updateSchedule } = useMutation({
         mutationFn: update,
-        onSettled: () => queryClient.invalidateQueries(["schedules"])
+        onSettled: () => {
+            queryClient.invalidateQueries(["schedules"])
+        }
     });
 
 
