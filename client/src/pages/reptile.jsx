@@ -14,6 +14,8 @@ import { FaTrash } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
 import useFoodItem from "../hooks/use_food_item";
 import { useState } from "react";
+import EditReptile from "../componets/edit_schedule";
+import EditSchedule from "../componets/edit_schedule";
 
 const Reptile = () => {
   useAuth();
@@ -24,6 +26,9 @@ const Reptile = () => {
   const navigate = useNavigate();
   const { deleteSchedule } = useSchedule();
   const [opened, { open, close }] = useDisclosure(false);
+  const [schedule, setSchedule] = useState(null);
+  const [scheudleOpened, { open: openSchedule, close: closeSchedule }] =
+    useDisclosure(false);
   const [foodItem, setFoodItem] = useState("");
   const handleDelete = async (e) => {
     const id = e.currentTarget.dataset.key;
@@ -52,10 +57,20 @@ const Reptile = () => {
     close();
   };
 
+  const handleEditSchedule = (schedule) => {
+    setSchedule(schedule);
+    openSchedule();
+  };
+
   if (reptile.isLoading) return null;
 
   return (
     <>
+      <EditSchedule
+        opened={scheudleOpened}
+        onClose={closeSchedule}
+        schedule={schedule}
+      />
       {/* Create Feeding Modal */}
       <Modal
         opened={opened}
@@ -136,6 +151,7 @@ const Reptile = () => {
                     key={schedule.id}
                     schedule={schedule}
                     handleDelete={handleDelete}
+                    click={() => handleEditSchedule(schedule)}
                   />
                 );
               })}
