@@ -14,6 +14,9 @@ import { FaTrash } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
 import useFoodItem from "../hooks/use_food_item";
 import { useState } from "react";
+import EditReptile from "../componets/edit_schedule";
+import EditSchedule from "../componets/edit_schedule";
+import useHusbandry from "../hooks/use_husbandry";
 
 const Reptile = () => {
   useAuth();
@@ -24,7 +27,12 @@ const Reptile = () => {
   const navigate = useNavigate();
   const { deleteSchedule } = useSchedule();
   const [opened, { open, close }] = useDisclosure(false);
+  const [schedule, setSchedule] = useState(null);
+  const [scheudleOpened, { open: openSchedule, close: closeSchedule }] =
+    useDisclosure(false);
   const [foodItem, setFoodItem] = useState("");
+  const { deleteHusbandry } = useHusbandry();
+
   const handleDelete = async (e) => {
     const id = e.currentTarget.dataset.key;
     ConfirmDelete({
@@ -43,6 +51,23 @@ const Reptile = () => {
     });
   };
 
+  const handleHusbandryDelete = async (record) => {
+    ConfirmDelete({
+      title: `Delete your husbandry record for ${reptile.name}`,
+      message:
+        "Are you sure you want to delete your husbandry record? This action will permanently delete your husbandry record and all of its data.",
+      confirm: "Delete Schedule",
+      cancel: "No don't delete it",
+      onConfirm: async () => {
+        await deleteHusbandry({ reptileId: record.reptileId, recordId: record.id });
+        notifications.show({
+          title: "Success",
+          message: "Successfully deleted the schedule",
+        });
+      },
+    });
+  };
+
   const handleSetReptile = (id) => {
     navigate(`/reptiles/${id}`);
   };
@@ -52,10 +77,20 @@ const Reptile = () => {
     close();
   };
 
+  const handleEditSchedule = (schedule) => {
+    setSchedule(schedule);
+    openSchedule();
+  };
+
   if (reptile.isLoading) return null;
 
   return (
     <>
+      <EditSchedule
+        opened={scheudleOpened}
+        onClose={closeSchedule}
+        schedule={schedule}
+      />
       {/* Create Feeding Modal */}
       <Modal
         opened={opened}
@@ -94,7 +129,7 @@ const Reptile = () => {
         {reptile?.data && (
           <div className="flex flex-col gap-3 ">
             {/* Container for Reptile Details */}
-            <div className="flex gap-3 overflow-y-auto p-2">
+            <div className="flex gap-3 overflow-y-auto p-2 m-auto">
               {reptile?.data && <ReptileDetail reptile={reptile.data} />}
 
               <div className="color-secondary p-3 flex flex-col gap-3 rounded-lg items-center justify-between">
@@ -136,6 +171,7 @@ const Reptile = () => {
                     key={schedule.id}
                     schedule={schedule}
                     handleDelete={handleDelete}
+                    click={() => handleEditSchedule(schedule)}
                   />
                 );
               })}
@@ -147,7 +183,7 @@ const Reptile = () => {
             </p>
             <div className="flex gap-10 overflow-y-auto p-2">
               {reptile?.data?.HusbandryRecord.map((record) => {
-                return <HusbandryTile key={record.id} record={record} />;
+                return <HusbandryTile  handleHusbandryDelete={() => handleHusbandryDelete(record)} key={record.id} record={record} />;
               })}
             </div>
           </div>

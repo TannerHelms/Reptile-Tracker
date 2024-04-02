@@ -16,13 +16,15 @@ import {
   IconDots,
   IconEye,
 } from "@tabler/icons-react";
+import { NavLink } from "react-router-dom";
+
 const ReptileTile = ({ reptile, details, deleteFn }) => {
   return (
     <Table.Tr key={reptile.id}>
       {/* Name of reptile and type */}
       <Table.Td>
         <Text fz="sm" fw={500}>
-          {reptile.name}
+          <NavLink style={{color: 'blue'}} to={`/reptiles/${reptile.id}`}>{reptile.name}</NavLink>
         </Text>
         <Text c="dimmed" fz="xs">
           {reptile.species.replace("_", " ")}

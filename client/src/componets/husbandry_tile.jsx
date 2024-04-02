@@ -1,6 +1,7 @@
-import { Divider, Text } from "@mantine/core";
+import { Divider, Text, Button } from "@mantine/core";
 
-const HusbandryTile = ({ record }) => {
+const HusbandryTile = ({ record, handleHusbandryDelete }) => {
+  console.log(record);
   return (
     <div
       className="color-secondary  p-5 rounded-lg shadow-md flex flex-col gap-3 w-96 min-w-96"
@@ -24,7 +25,7 @@ const HusbandryTile = ({ record }) => {
       </div>
       <div className="flex between justify-between w-full">
         <p>Humidity</p>
-        <p>{`${(record.humidity * 100).toFixed(1)}%`}</p>
+        <p>{`${(record.humidity).toFixed(1)}%`}</p>
       </div>
       <div className="flex between justify-between w-full">
         <p>Created At</p>
@@ -34,6 +35,9 @@ const HusbandryTile = ({ record }) => {
         <p>Updated At</p>
         <p>{`${record.updatedAt.split("T")[0]}`}</p>
       </div>
+      <Button color="red" data-key={record.id} onClick={handleHusbandryDelete}>
+        Delete
+      </Button>
     </div>
   );
 };

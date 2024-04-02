@@ -144,7 +144,7 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     const reptileId = Number(req.params.reptileId);
     const recordId = Number(req.params.recordId);
     const { length, weight, temperature, humidity } = req.body;
-  
+
     try {
       const updatedHusbandryRecord = await husbandry_records_repository.updateHusbandryRecord(recordId, length, weight, temperature, humidity);
       res.status(200).json({ updatedHusbandryRecord });
@@ -162,7 +162,7 @@ export const buildReptilesController = (reptileRepository: ReptileRepository, hu
     const userId = req.user.id;
     const reptileId = Number(req.params.reptileId);
     const recordId = Number(req.params.recordId);
-  
+
     try {
       await husbandry_records_repository.deleteHusbandryRecord(recordId);
       res.status(204).send(); // No content
