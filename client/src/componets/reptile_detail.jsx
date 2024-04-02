@@ -1,12 +1,16 @@
 import { Button, Modal, Select, Text, TextInput } from "@mantine/core";
 import { useDisclosure, useSetState } from "@mantine/hooks";
 import capitalize from "capitalize";
+import { notifications } from "@mantine/notifications";
 import React from "react";
 import useReptile from "../hooks/use_reptile";
+import { useNavigate } from "react-router-dom";
+import ConfirmDelete from "./confirm_delete";
 const ReptileDetail = ({ reptile }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [newReptile, setNewReptile] = useSetState({ ...reptile });
-  const { updateReptile } = useReptile();
+  const { updateReptile, deleteReptile } = useReptile();
+  const navigate = useNavigate();
 
   const handleUpdate = () => {
     console.log("here");
@@ -23,6 +27,21 @@ const ReptileDetail = ({ reptile }) => {
   const handleSexChange = (value, option) => {
     setNewReptile({ sex: value });
   };
+
+  const handleDeleteReptile = async () => {
+    ConfirmDelete({
+      title: `Delete your reptile record for ${reptile.name}`,
+      message:
+        "Are you sure you want to delete your reptile record? This action will permanently delete your reptile record and all of its data.",
+      confirm: "Delete Reptile",
+      cancel: "No don't delete it",
+      onConfirm: async () => {
+        await deleteReptile(reptile.id);
+        navigate("/dashboard");
+        location.reload();
+      },
+    });
+  }
 
   return (
     <>
@@ -92,6 +111,7 @@ const ReptileDetail = ({ reptile }) => {
           </Text>
         </div>
         <Button onClick={open}>Edit</Button>
+        <Button color="red" onClick={handleDeleteReptile}>Delete</Button>
       </div>
     </>
   );

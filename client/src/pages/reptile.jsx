@@ -56,13 +56,13 @@ const Reptile = () => {
       title: `Delete your husbandry record for ${reptile.name}`,
       message:
         "Are you sure you want to delete your husbandry record? This action will permanently delete your husbandry record and all of its data.",
-      confirm: "Delete Schedule",
+      confirm: "Delete Husbandry Record",
       cancel: "No don't delete it",
       onConfirm: async () => {
         await deleteHusbandry({ reptileId: record.reptileId, recordId: record.id });
         notifications.show({
           title: "Success",
-          message: "Successfully deleted the schedule",
+          message: "Successfully deleted the husbandry record",
         });
       },
     });
