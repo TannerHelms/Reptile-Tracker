@@ -31,7 +31,7 @@ import {
   
     const handleCreateHusbandryRecord = async (e) => {
         e.preventDefault();
-        const res = await createHusbandry(reptileId, {length, weight, temperature, humidity});
+        const res = await createHusbandry({reptileId, length, weight, temperature, humidity});
 
         console.log(res)
         if (res) {

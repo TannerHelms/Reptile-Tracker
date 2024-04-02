@@ -16,6 +16,7 @@ import useFoodItem from "../hooks/use_food_item";
 import { useState } from "react";
 import EditReptile from "../componets/edit_schedule";
 import EditSchedule from "../componets/edit_schedule";
+import useHusbandry from "../hooks/use_husbandry";
 
 const Reptile = () => {
   useAuth();
@@ -30,6 +31,8 @@ const Reptile = () => {
   const [scheudleOpened, { open: openSchedule, close: closeSchedule }] =
     useDisclosure(false);
   const [foodItem, setFoodItem] = useState("");
+  const { deleteHusbandry } = useHusbandry();
+
   const handleDelete = async (e) => {
     const id = e.currentTarget.dataset.key;
     ConfirmDelete({
@@ -40,6 +43,23 @@ const Reptile = () => {
       cancel: "No don't delete it",
       onConfirm: async () => {
         await deleteSchedule({ reptileId: reptile?.data?.id, id });
+        notifications.show({
+          title: "Success",
+          message: "Successfully deleted the schedule",
+        });
+      },
+    });
+  };
+
+  const handleHusbandryDelete = async (record) => {
+    ConfirmDelete({
+      title: `Delete your husbandry record for ${reptile.name}`,
+      message:
+        "Are you sure you want to delete your husbandry record? This action will permanently delete your husbandry record and all of its data.",
+      confirm: "Delete Schedule",
+      cancel: "No don't delete it",
+      onConfirm: async () => {
+        await deleteHusbandry({ reptileId: record.reptileId, recordId: record.id });
         notifications.show({
           title: "Success",
           message: "Successfully deleted the schedule",
@@ -163,7 +183,7 @@ const Reptile = () => {
             </p>
             <div className="flex gap-10 overflow-y-auto p-2">
               {reptile?.data?.HusbandryRecord.map((record) => {
-                return <HusbandryTile key={record.id} record={record} />;
+                return <HusbandryTile  handleHusbandryDelete={() => handleHusbandryDelete(record)} key={record.id} record={record} />;
               })}
             </div>
           </div>

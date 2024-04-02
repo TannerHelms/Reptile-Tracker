@@ -4,16 +4,16 @@ const useHusbandry = () => {
 
     // CRUD Functionality for a reptile
 
-    const update = (reptile) => api.put(`/reptiles/${reptile.id}/husbandry`, reptile)
+    const updateHusbandry = (husbandry) => api.put(`/reptiles/${husbandry.reptileId}/husbandry/${husbandry.recordId}`, husbandry)
 
-    const createHusbandry = (reptileId, husbandry) => {
-        const res = api.post(`/reptiles/${reptileId}/husbandry`, husbandry)
+    const createHusbandry = (husbandry) => {
+        const res = api.post(`/reptiles/${husbandry.reptileId}/husbandry`, husbandry)
         return res;
     }
 
-    const del = (reptileId) => api.del(`/reptiles/${reptileId}`)
+    const deleteHusbandry = (husbandry) => api.del(`/reptiles/${husbandry.reptileId}/husbandry/${husbandry.recordId}`)
 
-    return { createHusbandry };
+    return { updateHusbandry, createHusbandry, deleteHusbandry };
 
 };
 
